@@ -3,7 +3,7 @@ package br.edu.unicid.model;
 import java.util.Date;
 
 public class Aluno {
-	private int rgm;
+	private String rgm;
 	private String nome;
 	private Date dataDeNascimento;
 	private String cpf;
@@ -20,7 +20,7 @@ public class Aluno {
 
 	}
 
-	public Aluno(int rgm, String nome, Date dataDeNascimento, String cpf, String email, String endereco,
+	public Aluno(String rgm, String nome, Date dataDeNascimento, String cpf, String email, String endereco,
 			String municipio, String uf, String celular, String curso, String campus, String periodo) {
 		super();
 		this.rgm = rgm;
@@ -37,11 +37,11 @@ public class Aluno {
 		this.periodo = periodo;
 	}
 
-	public int getRgm() {
+	public String getRgm() {
 		return rgm;
 	}
 
-	public void setRgm(int rgm) {
+	public void setRgm(String rgm) {
 		this.rgm = rgm;
 	}
 
