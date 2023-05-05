@@ -31,9 +31,10 @@ public class AlunoDAO {
 					+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
-			Date dataDeNascimento = dateFormater.parse("2023-05-03");
-			java.sql.Date dataDeNascimentoFormatted = new java.sql.Date(dataDeNascimento.getTime());
+			String dataDeNascimentoString = dateFormater.format(aluno.getDataDeNascimento());
+			Date dataDeNascimentoWithoutMask = dateFormater.parse(dataDeNascimentoString.replaceAll("/", "-"));
 
+			java.sql.Date dataDeNascimentoFormatted = new java.sql.Date(dataDeNascimentoWithoutMask.getTime());
 			String cpfWithoutMask = aluno.getCpf().replaceAll("[.-]", "");
 			String celularWithoutMask = aluno.getCelular().replaceAll("[()\\s-]", "");
 
@@ -80,7 +81,7 @@ public class AlunoDAO {
 					aluno.setCurso(rs.getString("curso"));
 					aluno.setCampus(rs.getString("campus"));
 					aluno.setPeriodo(rs.getString("periodo"));
-					
+
 					return aluno;
 				} else {
 					return null;
@@ -156,6 +157,64 @@ public class AlunoDAO {
 			return alunoArr;
 		} catch (Exception err) {
 			throw new Exception("Erro ao listar todos os alunos: " + err.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(connection, preparedStatement);
+		}
+	}
+
+	public void alterar(Aluno aluno) throws Exception {
+		try {
+
+			String sql = "UPDATE aluno SET nome=?, dataDeNascimento=?, cpf=?, email=?, endereco=?, municipio=?, uf=?, celular=?, curso=?, campus=?, periodo=? "
+					+ "WHERE rgm=?";
+
+			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
+			Date dataDeNascimento = dateFormater.parse("2023-05-03");
+			java.sql.Date dataDeNascimentoFormatted = new java.sql.Date(dataDeNascimento.getTime());
+
+			String cpfWithoutMask = aluno.getCpf().replaceAll("[.-]", "");
+			String celularWithoutMask = aluno.getCelular().replaceAll("[()\\s-]", "");
+
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, aluno.getNome());
+			preparedStatement.setDate(2, dataDeNascimentoFormatted);
+			preparedStatement.setString(3, cpfWithoutMask);
+			preparedStatement.setString(4, aluno.getEmail());
+			preparedStatement.setString(5, aluno.getEndereco());
+			preparedStatement.setString(6, aluno.getMunicipio());
+			preparedStatement.setString(7, aluno.getUf());
+			preparedStatement.setString(8, celularWithoutMask);
+			preparedStatement.setString(9, aluno.getCurso());
+			preparedStatement.setString(10, aluno.getCampus());
+			preparedStatement.setString(11, aluno.getPeriodo());
+
+			preparedStatement.setString(12, aluno.getRgm());
+
+			preparedStatement.executeUpdate();
+
+			System.out.println("Caiu no DAo de alterar aluno");
+		} catch (Exception err) {
+			System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
+			throw new Exception(err.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(connection, preparedStatement);
+		}
+	}
+
+	public void excluir(String rgm) throws Exception {
+		try {
+
+			String sql = "DELETE FROM aluno " + "WHERE rgm=?";
+
+			preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, rgm);
+
+			preparedStatement.executeUpdate();
+		} catch (Exception err) {
+			System.err.println("Ocorreu um erro ao excluir aluno: " + err.getMessage());
+			throw new Exception(err.getMessage());
 		} finally {
 			ConnectionFactory.closeConnection(connection, preparedStatement);
 		}

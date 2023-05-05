@@ -24,15 +24,6 @@ public class ConnectionFactory {
 		}
 	}
 
-	public static void main(String[] args) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			JOptionPane.showMessageDialog(null, "Banco de dados conectado com sucesso!!");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void closeConnection(Connection conn, Statement stmt) throws Exception {
 		close(conn, stmt, null);
 	}
@@ -51,6 +42,15 @@ public class ConnectionFactory {
 				conn.close();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			JOptionPane.showMessageDialog(null, "Banco de dados conectado com sucesso!!");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

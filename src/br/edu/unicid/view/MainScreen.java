@@ -40,17 +40,16 @@ import javax.swing.text.MaskFormatter;
 
 import br.edu.unicid.dao.AlunoDAO;
 import br.edu.unicid.model.Aluno;
+import br.edu.unicid.utilities.ViewAlunoMethods;
 
 public class MainScreen extends JFrame {
-
 	private JPanel contentPane;
 	private JFormattedTextField formattedTextFieldRgm;
 	private JComboBox<?> comboBoxCurso_1;
 	private Aluno aluno;
 	private AlunoDAO alunoDAO;
 	private String selectedPeriodo;
-	private String errorMessage = "";
-	private boolean hasEmptyField = false;
+	private ViewAlunoMethods viewAlunoMethods = new ViewAlunoMethods();
 
 	/**
 	 * Launch the application.
@@ -294,7 +293,7 @@ public class MainScreen extends JFrame {
 		panelCurso.add(lblCampus);
 
 		JComboBox<String> comboCampus = new JComboBox<String>();
-		comboCampus.setModel(new DefaultComboBoxModel(new String[] { "Tatuapé", "Pinheiros" }));
+		comboCampus.setModel(new DefaultComboBoxModel<String>(new String[] { "Tatuapé", "Pinheiros" }));
 		comboCampus.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboCampus.setBounds(69, 44, 385, 22);
 		panelCurso.add(comboCampus);
@@ -350,78 +349,31 @@ public class MainScreen extends JFrame {
 				formattedTextFieldCpf, formattedTextFieldEmail, formattedTextFieldEnd, formattedTextFieldMunicipio,
 				formattedTextFieldCelular };
 		JComboBox[] comboBoxes = { comboBoxCurso, comboCampus, comboBoxUf };
-		String[] comboBoxValues = { selectedPeriodo };
 
 		JButton btnSave = new JButton(saveIcon);
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					hasEmptyField = false;
-					aluno = new Aluno();
-					alunoDAO = new AlunoDAO();
+					// validação do formulário
+					viewAlunoMethods.formValidation(textFields, comboBoxes, selectedPeriodo);
 
-					Aluno alunoExists = alunoDAO.verificarSeAlunoExiste(formattedTextFieldRgm.getText());
-					
-					// se o aluno já existe
-					if (alunoExists != null) {
-						JOptionPane.showMessageDialog(null, "Já existe um aluno cadastrado com o mesmo RGM");
-						return;
-					}
+					// transformando string para data
+					SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+					Date dataDeNascimento = format.parse(formattedTextFieldDataNascimento.getText());
 
-					for (JTextField textField : textFields) {
-						if (textField.getText().isEmpty()) {
-							hasEmptyField = true;
-							errorMessage = "Preencha todos os campos (não esqueça da aba de cursos)";
-							break;
-						}
-					}
+					viewAlunoMethods.saveAluno(formattedTextFieldRgm.getText(), formattedTextFieldNome.getText(),
+							dataDeNascimento, formattedTextFieldCpf.getText(), formattedTextFieldEmail.getText(),
+							formattedTextFieldEnd.getText(), formattedTextFieldMunicipio.getText(),
+							comboBoxUf.getSelectedItem().toString(), formattedTextFieldCelular.getText(),
+							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
+							selectedPeriodo);
 
-					if (!hasEmptyField) {
-						for (JComboBox comboBox : comboBoxes) {
-							if (comboBox.getSelectedItem() == null) {
-								hasEmptyField = true;
-								errorMessage = "Selecione uma opção em todos os campos do curso";
-								break;
-							}
-						}
-					}
-
-					
-					if (!hasEmptyField && selectedPeriodo == null) {
-						hasEmptyField = true;
-						errorMessage = "Preencha o período em que você estuda";
-					}
-
-					if (hasEmptyField) {
-						JOptionPane.showMessageDialog(null, errorMessage);
-						return;
-					}
-
-					SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
-					Date dataDeNascimento = dateFormater
-							.parse(formattedTextFieldDataNascimento.getText().replaceAll("/", "-"));
-
-					aluno.setRgm(formattedTextFieldRgm.getText());
-					aluno.setNome(formattedTextFieldNome.getText());
-					aluno.setDataDeNascimento(dataDeNascimento);
-					aluno.setCpf(formattedTextFieldCpf.getText());
-					aluno.setEmail(formattedTextFieldEmail.getText());
-					aluno.setEndereco(formattedTextFieldEnd.getText());
-					aluno.setMunicipio(formattedTextFieldMunicipio.getText());
-					aluno.setUf(comboBoxUf.getSelectedItem().toString());
-					aluno.setCelular(formattedTextFieldCelular.getText());
-					aluno.setCurso(comboBoxCurso.getSelectedItem().toString());
-					aluno.setCampus(comboCampus.getSelectedItem().toString());
-					aluno.setPeriodo(selectedPeriodo);
-
-					alunoDAO.salvar(aluno);
-
-					JOptionPane.showMessageDialog(null, "Aluno criado com sucesso!!");
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao salvar o aluno: " + err.getMessage());
 				}
 			}
 		});
+
 		btnSave.setToolTipText("Salvar");
 		btnSave.setBounds(10, 121, 70, 70);
 		panelCurso.add(btnSave);
@@ -430,8 +382,27 @@ public class MainScreen extends JFrame {
 		btnUpdate.setToolTipText("Alterar");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					// validação do formulário
+					viewAlunoMethods.formValidation(textFields, comboBoxes, selectedPeriodo);
+
+					// transformando string para data
+					SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+					Date dataDeNascimento = format.parse(formattedTextFieldDataNascimento.getText());
+
+					viewAlunoMethods.updateAluno(formattedTextFieldRgm.getText(), formattedTextFieldNome.getText(),
+							dataDeNascimento, formattedTextFieldCpf.getText(), formattedTextFieldEmail.getText(),
+							formattedTextFieldEnd.getText(), formattedTextFieldMunicipio.getText(),
+							comboBoxUf.getSelectedItem().toString(), formattedTextFieldCelular.getText(),
+							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
+							selectedPeriodo);
+
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
+				}
 			}
 		});
+
 		btnUpdate.setBounds(90, 121, 70, 70);
 		panelCurso.add(btnUpdate);
 
@@ -439,21 +410,8 @@ public class MainScreen extends JFrame {
 		btnGet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					alunoDAO = new AlunoDAO();
-					String rgm = formattedTextFieldRgm.getText();
-
 					// caso o campo de RGM esteja vazio
-					if (rgm.trim().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Por favor, preencha o campo de RGM");
-						return;
-					}
-
-					aluno = alunoDAO.consultar(rgm);
-
-					if (aluno == null) {
-						JOptionPane.showMessageDialog(null, "Esse RGM não existe");
-						return;
-					}
+					Aluno aluno = viewAlunoMethods.verifyRgm(formattedTextFieldRgm.getText());
 
 					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 					String dataNascimentoFormatted = dateFormat.format(aluno.getDataDeNascimento());
@@ -486,6 +444,7 @@ public class MainScreen extends JFrame {
 						selectedPeriodo = "Noturno";
 					}
 
+					JOptionPane.showMessageDialog(null, "Aluno encontrado!!");
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
 				}
@@ -497,6 +456,11 @@ public class MainScreen extends JFrame {
 		panelCurso.add(btnGet);
 
 		JButton btnDelete = new JButton(trashIcon);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
+			}
+		});
 		btnDelete.setToolTipText("Deletar");
 		btnDelete.setBounds(249, 121, 70, 70);
 		panelCurso.add(btnDelete);
@@ -516,8 +480,6 @@ public class MainScreen extends JFrame {
 				comboBoxCurso.setSelectedIndex(0);
 				comboBoxUf.setSelectedIndex(0);
 				radioBtnGroup.clearSelection();
-
-				hasEmptyField = false;
 			}
 		});
 		btnCleanFields.setToolTipText("Limpar campos");
@@ -633,7 +595,6 @@ public class MainScreen extends JFrame {
 		JPanel panelBoletim = new JPanel();
 		panelBoletim.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tabbedPane.addTab("Boletim", null, panelBoletim, null);
-
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
