@@ -4,15 +4,15 @@ public class NotasFaltas {
 	private int id;
 	private String disciplina;
 	private String semestre;
-	private	float nota;
-	private int falta;
+	private	String nota;
+	private String falta;
 	private String rgmAluno;
 	
 	public NotasFaltas() {
 		
 	}
 
-	public NotasFaltas(int id, String disciplina, String semestre, float nota, int falta, String rgmAluno) {
+	public NotasFaltas(int id, String disciplina, String semestre, String nota, String falta, String rgmAluno) {
 		super();
 		this.id = id;
 		this.disciplina = disciplina;
@@ -46,19 +46,19 @@ public class NotasFaltas {
 		this.semestre = semestre;
 	}
 
-	public float getNota() {
+	public String getNota() {
 		return nota;
 	}
 
-	public void setNota(float nota) {
+	public void setNota(String nota) {
 		this.nota = nota;
 	}
 
-	public int getFalta() {
+	public String getFalta() {
 		return falta;
 	}
 
-	public void setFalta(int falta) {
+	public void setFalta(String falta) {
 		this.falta = falta;
 	}
 

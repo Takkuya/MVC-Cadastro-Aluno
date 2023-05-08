@@ -39,15 +39,19 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
 import br.edu.unicid.dao.AlunoDAO;
+import br.edu.unicid.dao.NotasFaltasDAO;
 import br.edu.unicid.model.Aluno;
+import br.edu.unicid.model.NotasFaltas;
 import br.edu.unicid.utilities.ViewAlunoMethods;
 
 public class MainScreen extends JFrame {
 	private JPanel contentPane;
 	private JFormattedTextField formattedTextFieldRgm;
-	private JComboBox<?> comboBoxCurso_1;
+	private JComboBox<?> comboBoxCursoDisciplina;
 	private Aluno aluno;
 	private AlunoDAO alunoDAO;
+	private NotasFaltas notasFaltas;
+	private NotasFaltasDAO notasFaltasDAO;
 	private String selectedPeriodo;
 	private ViewAlunoMethods viewAlunoMethods = new ViewAlunoMethods();
 
@@ -74,64 +78,6 @@ public class MainScreen extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 499, 308);
 
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-
-		JMenu mnAluno = new JMenu("Aluno");
-		mnAluno.setHorizontalAlignment(SwingConstants.LEFT);
-		menuBar.add(mnAluno);
-
-		JMenuItem mntmSalvar = new JMenuItem("Salvar");
-		mntmSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-		mntmSalvar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		mnAluno.add(mntmSalvar);
-
-		JMenuItem mntmAlterar = new JMenuItem("Alterar");
-		mntmAlterar.setHorizontalAlignment(SwingConstants.CENTER);
-		mnAluno.add(mntmAlterar);
-
-		JMenuItem mntmConsultar = new JMenuItem("Consultar");
-		mntmConsultar.setHorizontalAlignment(SwingConstants.CENTER);
-		mnAluno.add(mntmConsultar);
-
-		JMenuItem mntmExcluir = new JMenuItem("Excluir");
-		mntmExcluir.setHorizontalAlignment(SwingConstants.CENTER);
-		mnAluno.add(mntmExcluir);
-
-		JSeparator separator_1 = new JSeparator();
-		mnAluno.add(separator_1);
-
-		JMenuItem mntmNewMenuItem = new JMenuItem("Sair");
-		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_DOWN_MASK));
-		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.CENTER);
-		mnAluno.add(mntmNewMenuItem);
-
-		JMenu mnNotasFaltas = new JMenu("Notas e Faltas");
-		menuBar.add(mnNotasFaltas);
-
-		JMenuItem mntmNotasFaltasSalvar = new JMenuItem("Salvar");
-		mntmNotasFaltasSalvar.setHorizontalAlignment(SwingConstants.CENTER);
-		mnNotasFaltas.add(mntmNotasFaltasSalvar);
-
-		JMenuItem mntmNotasFaltasAlterar = new JMenuItem("Alterar");
-		mntmNotasFaltasAlterar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
-		mntmNotasFaltasAlterar.setHorizontalAlignment(SwingConstants.CENTER);
-		mnNotasFaltas.add(mntmNotasFaltasAlterar);
-
-		JMenuItem mntmNotasFaltasExcluir = new JMenuItem("Excluir");
-		mntmNotasFaltasExcluir.setHorizontalAlignment(SwingConstants.CENTER);
-		mnNotasFaltas.add(mntmNotasFaltasExcluir);
-
-		JMenuItem mntmNotasFaltasConsultar = new JMenuItem("Consultar");
-		mntmNotasFaltasConsultar.setHorizontalAlignment(SwingConstants.CENTER);
-		mnNotasFaltas.add(mntmNotasFaltasConsultar);
-
-		JMenu mnAjuda = new JMenu("Ajuda");
-		menuBar.add(mnAjuda);
-
-		JMenuItem mntmAjudaSobre = new JMenuItem("Sobre");
-		mntmAjudaSobre.setHorizontalAlignment(SwingConstants.CENTER);
-		mnAjuda.add(mntmAjudaSobre);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -448,7 +394,6 @@ public class MainScreen extends JFrame {
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
 				}
-
 			}
 		});
 		btnGet.setToolTipText("Procurar");
@@ -496,10 +441,10 @@ public class MainScreen extends JFrame {
 		lblRgm_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelNotasEFaltas.add(lblRgm_1);
 
-		JFormattedTextField formattedTextFieldRgm_1 = new JFormattedTextField();
-		formattedTextFieldRgm_1.setBounds(51, 11, 149, 20);
-		formattedTextFieldRgm_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panelNotasEFaltas.add(formattedTextFieldRgm_1);
+		JFormattedTextField formattedTextFieldRgmNotas = new JFormattedTextField(new MaskFormatter(rgmMask));
+		formattedTextFieldRgmNotas.setBounds(51, 11, 149, 20);
+		formattedTextFieldRgmNotas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panelNotasEFaltas.add(formattedTextFieldRgmNotas);
 
 		JFormattedTextField formattedTextFieldNomeAluno = new JFormattedTextField();
 		formattedTextFieldNomeAluno.setBounds(210, 11, 244, 20);
@@ -516,12 +461,12 @@ public class MainScreen extends JFrame {
 		lblDisciplina.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelNotasEFaltas.add(lblDisciplina);
 
-		comboBoxCurso_1 = new JComboBox();
-		comboBoxCurso_1.setBounds(79, 70, 375, 22);
-		comboBoxCurso_1.setModel(new DefaultComboBoxModel(new String[] { "Análise e Desenvolvimento de Sistemas",
-				"Administração", "Ciência da Computação", "Medicina" }));
-		comboBoxCurso_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panelNotasEFaltas.add(comboBoxCurso_1);
+		comboBoxCursoDisciplina = new JComboBox();
+		comboBoxCursoDisciplina.setBounds(79, 70, 375, 22);
+		comboBoxCursoDisciplina.setModel(new DefaultComboBoxModel(new String[] {
+				"Análise e Desenvolvimento de Sistemas", "Administração", "Ciência da Computação", "Medicina" }));
+		comboBoxCursoDisciplina.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panelNotasEFaltas.add(comboBoxCursoDisciplina);
 
 		JLabel lblSemestre = new JLabel("Semestre");
 		lblSemestre.setBounds(10, 109, 62, 17);
@@ -537,8 +482,8 @@ public class MainScreen extends JFrame {
 
 		JComboBox comboNota = new JComboBox();
 		comboNota.setBounds(227, 106, 62, 22);
-		comboNota.setModel(new DefaultComboBoxModel(new String[] { "0", "0,5", "1", "1,5", "2", "2,5", "3", "3,5", "4",
-				"4,5", "5", "5,5", "6", "6,5", "7", "7,5", "8", "8,5", "9", "9,5", "10" }));
+		comboNota.setModel(new DefaultComboBoxModel(new String[] { "0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4",
+				"4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10" }));
 		comboNota.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelNotasEFaltas.add(comboNota);
 
@@ -557,44 +502,298 @@ public class MainScreen extends JFrame {
 		formattedTextFieldFaltas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelNotasEFaltas.add(formattedTextFieldFaltas);
 
-		JButton btnSave_1 = new JButton(saveIcon);
-		btnSave_1.setBounds(10, 140, 70, 70);
-		btnSave_1.addActionListener(new ActionListener() {
+		JButton btnNotasSave = new JButton(saveIcon);
+		btnNotasSave.setBounds(10, 140, 70, 70);
+		btnNotasSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					notasFaltasDAO = new NotasFaltasDAO();
+					notasFaltas = new NotasFaltas();
+
+					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
+					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
+					notasFaltas.setNota(comboNota.getSelectedItem().toString());
+					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
+
+					notasFaltasDAO.salvar(notasFaltas);
+
+					JOptionPane.showMessageDialog(null, "Informações inseridas com sucesso!!");
+				} catch (Exception err) {
+//					System.out.println("disciplina..." + comboBoxCursoDisciplina.getSelectedItem().toString());
+//					System.out.println("semestre..." + comboBoxSemestre.getSelectedItem().toString());
+//					System.out.println("nota..." + comboNota.getSelectedItem().toString());
+//					System.out.println("falta..." + notasFaltas.getFalta());
+//					System.out.println("rgm..." + formattedTextFieldRgmNotas.getText());
+					System.err.println("Ocorreu um erro ao salvar a nota: " + err.getMessage());
+				}
 			}
 		});
-		btnSave_1.setToolTipText("Salvar");
-		panelNotasEFaltas.add(btnSave_1);
+		btnNotasSave.setToolTipText("Salvar");
+		panelNotasEFaltas.add(btnNotasSave);
 
-		JButton btnUpdate_1 = new JButton(editIcon);
-		btnUpdate_1.addActionListener(new ActionListener() {
+		JButton btnNotasUpdate = new JButton(editIcon);
+		btnNotasUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Rodando e rodando");
+				try {
+					notasFaltasDAO = new NotasFaltasDAO();
+					notasFaltas = new NotasFaltas();
+
+					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
+					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
+					notasFaltas.setNota(comboNota.getSelectedItem().toString());
+					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
+
+					notasFaltasDAO.alterar(notasFaltas);
+					
+					JOptionPane.showMessageDialog(null, "Informações alteradas com sucesso!!");
+				} catch (Exception err) {
+					System.err.println("Erro ao alterar nota:" + err.getMessage());
+				}
 			}
 		});
-		btnUpdate_1.setToolTipText("Alterar");
-		btnUpdate_1.setBounds(90, 140, 70, 70);
-		panelNotasEFaltas.add(btnUpdate_1);
+		btnNotasUpdate.setToolTipText("Alterar");
+		btnNotasUpdate.setBounds(90, 140, 70, 70);
+		panelNotasEFaltas.add(btnNotasUpdate);
 
-		JButton btnGet_1 = new JButton(searchIcon);
-		btnGet_1.setToolTipText("Listar");
-		btnGet_1.setBounds(170, 140, 70, 70);
-		panelNotasEFaltas.add(btnGet_1);
+		JButton btnNotasGet = new JButton(searchIcon);
+		btnNotasGet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// caso o campo de RGM esteja vazio
+					Aluno aluno = viewAlunoMethods.verifyRgm(formattedTextFieldRgmNotas.getText());
 
-		JButton btnDelete_1 = new JButton(trashIcon);
-		btnDelete_1.setToolTipText("Deletar");
-		btnDelete_1.setBounds(249, 140, 70, 70);
-		panelNotasEFaltas.add(btnDelete_1);
+					formattedTextFieldNomeAluno.setText(aluno.getNome());
+					formattedTextFieldCursoAluno.setText(aluno.getCurso());
 
-		JButton btnCleanFields_1 = new JButton(xIcon);
-		btnCleanFields_1.setText("Limpar Campos");
-		btnCleanFields_1.setToolTipText("Limpar Campos");
-		btnCleanFields_1.setBounds(329, 140, 125, 70);
-		panelNotasEFaltas.add(btnCleanFields_1);
+					JOptionPane.showMessageDialog(null, "Aluno encontrado!!");
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
+				}
+			}
+		});
+		btnNotasGet.setToolTipText("Listar");
+		btnNotasGet.setBounds(170, 140, 70, 70);
+		panelNotasEFaltas.add(btnNotasGet);
+
+		JButton btnNotasDelete = new JButton(trashIcon);
+		btnNotasDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					notasFaltasDAO = new NotasFaltasDAO();
+
+					String rgm = formattedTextFieldRgmNotas.getText();
+					String disciplina = comboBoxCursoDisciplina.getSelectedItem().toString();
+					String semestre = comboBoxSemestre.getSelectedItem().toString();
+
+					notasFaltasDAO.excluir(rgm, disciplina, semestre);
+
+					JOptionPane.showMessageDialog(null, "Nota excluída com sucesso!");
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao deletar a nota: " + err.getMessage());
+				}
+			}
+		});
+		btnNotasDelete.setToolTipText("Deletar");
+		btnNotasDelete.setBounds(249, 140, 70, 70);
+		panelNotasEFaltas.add(btnNotasDelete);
+
+		JButton btnNotasCleanFields = new JButton(xIcon);
+		btnNotasCleanFields.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formattedTextFieldRgmNotas.setText(null);
+				formattedTextFieldNomeAluno.setText(null);
+				formattedTextFieldCursoAluno.setText(null);
+
+				comboBoxCursoDisciplina.setSelectedIndex(0);
+				comboBoxSemestre.setSelectedIndex(0);
+				comboNota.setSelectedIndex(0);
+				formattedTextFieldFaltas.setText(null);
+			}
+		});
+		btnNotasCleanFields.setText("Limpar Campos");
+		btnNotasCleanFields.setToolTipText("Limpar Campos");
+		btnNotasCleanFields.setBounds(329, 140, 125, 70);
+		panelNotasEFaltas.add(btnNotasCleanFields);
 
 		JPanel panelBoletim = new JPanel();
 		panelBoletim.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tabbedPane.addTab("Boletim", null, panelBoletim, null);
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu mnAluno = new JMenu("Aluno");
+		mnAluno.setHorizontalAlignment(SwingConstants.LEFT);
+		menuBar.add(mnAluno);
+
+		JMenuItem mntmSalvar = new JMenuItem("Salvar");
+		mntmSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// validação do formulário
+					viewAlunoMethods.formValidation(textFields, comboBoxes, selectedPeriodo);
+
+					// transformando string para data
+					SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+					Date dataDeNascimento = format.parse(formattedTextFieldDataNascimento.getText());
+
+					viewAlunoMethods.saveAluno(formattedTextFieldRgm.getText(), formattedTextFieldNome.getText(),
+							dataDeNascimento, formattedTextFieldCpf.getText(), formattedTextFieldEmail.getText(),
+							formattedTextFieldEnd.getText(), formattedTextFieldMunicipio.getText(),
+							comboBoxUf.getSelectedItem().toString(), formattedTextFieldCelular.getText(),
+							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
+							selectedPeriodo);
+
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao salvar o aluno: " + err.getMessage());
+				}
+			}
+		});
+		mntmSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		mntmSalvar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+		mnAluno.add(mntmSalvar);
+
+		JMenuItem mntmAlterar = new JMenuItem("Alterar");
+		mntmAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// validação do formulário
+					viewAlunoMethods.formValidation(textFields, comboBoxes, selectedPeriodo);
+
+					// transformando string para data
+					SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+					Date dataDeNascimento = format.parse(formattedTextFieldDataNascimento.getText());
+
+					viewAlunoMethods.updateAluno(formattedTextFieldRgm.getText(), formattedTextFieldNome.getText(),
+							dataDeNascimento, formattedTextFieldCpf.getText(), formattedTextFieldEmail.getText(),
+							formattedTextFieldEnd.getText(), formattedTextFieldMunicipio.getText(),
+							comboBoxUf.getSelectedItem().toString(), formattedTextFieldCelular.getText(),
+							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
+							selectedPeriodo);
+
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
+				}
+			}
+		});
+		mntmAlterar.setHorizontalAlignment(SwingConstants.CENTER);
+		mnAluno.add(mntmAlterar);
+
+		JMenuItem mntmConsultar = new JMenuItem("Consultar");
+		mntmConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// caso o campo de RGM esteja vazio
+					Aluno aluno = viewAlunoMethods.verifyRgm(formattedTextFieldRgm.getText());
+
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+					String dataNascimentoFormatted = dateFormat.format(aluno.getDataDeNascimento());
+
+					formattedTextFieldNome.setText(aluno.getNome());
+					formattedTextFieldDataNascimento.setText(dataNascimentoFormatted);
+					formattedTextFieldCpf.setText(aluno.getCpf());
+					formattedTextFieldEmail.setText(aluno.getEmail());
+					formattedTextFieldEnd.setText(aluno.getEndereco());
+					formattedTextFieldMunicipio.setText(aluno.getMunicipio());
+					comboBoxUf.setSelectedItem(aluno.getUf());
+					formattedTextFieldCelular.setText(aluno.getCelular());
+					comboBoxCurso.setSelectedItem(aluno.getCurso());
+					comboCampus.setSelectedItem(aluno.getCampus());
+
+					ButtonModel matutino = rdbtnMatutino.getModel();
+					ButtonModel vespertino = rdbtnVespertino.getModel();
+					ButtonModel noturno = rdbtnNoturno.getModel();
+
+					if (aluno.getPeriodo().equals("Matutino")) {
+						radioBtnGroup.setSelected(matutino, true);
+						selectedPeriodo = "Matutino";
+					}
+					if (aluno.getPeriodo().equals("Vesperino")) {
+						radioBtnGroup.setSelected(vespertino, true);
+						selectedPeriodo = "Vesperino";
+					}
+					if (aluno.getPeriodo().equals("Noturno")) {
+						radioBtnGroup.setSelected(noturno, true);
+						selectedPeriodo = "Noturno";
+					}
+
+					JOptionPane.showMessageDialog(null, "Aluno encontrado!!");
+				} catch (Exception err) {
+					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
+				}
+			}
+		});
+		mntmConsultar.setHorizontalAlignment(SwingConstants.CENTER);
+		mnAluno.add(mntmConsultar);
+
+		JMenuItem mntmExcluir = new JMenuItem("Excluir");
+		mntmExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
+			}
+		});
+		mntmExcluir.setHorizontalAlignment(SwingConstants.CENTER);
+		mnAluno.add(mntmExcluir);
+
+		JSeparator separator_1 = new JSeparator();
+		mnAluno.add(separator_1);
+
+		JMenuItem mntmNewMenuItem = new JMenuItem("Sair");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formattedTextFieldRgm.setText(null);
+				formattedTextFieldNome.setText(null);
+				formattedTextFieldEmail.setText(null);
+				formattedTextFieldCelular.setText(null);
+				formattedTextFieldMunicipio.setText(null);
+				formattedTextFieldEnd.setText(null);
+				formattedTextFieldCpf.setText(null);
+				formattedTextFieldDataNascimento.setText(null);
+				comboCampus.setSelectedIndex(0);
+				comboBoxCurso.setSelectedIndex(0);
+				comboBoxUf.setSelectedIndex(0);
+				radioBtnGroup.clearSelection();
+			}
+		});
+		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_DOWN_MASK));
+		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.CENTER);
+		mnAluno.add(mntmNewMenuItem);
+
+		JMenu mnNotasFaltas = new JMenu("Notas e Faltas");
+		menuBar.add(mnNotasFaltas);
+
+		JMenuItem mntmNotasFaltasSalvar = new JMenuItem("Salvar");
+		mntmNotasFaltasSalvar.setHorizontalAlignment(SwingConstants.CENTER);
+		mnNotasFaltas.add(mntmNotasFaltasSalvar);
+
+		JMenuItem mntmNotasFaltasAlterar = new JMenuItem("Alterar");
+		mntmNotasFaltasAlterar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
+		mntmNotasFaltasAlterar.setHorizontalAlignment(SwingConstants.CENTER);
+		mnNotasFaltas.add(mntmNotasFaltasAlterar);
+
+		JMenuItem mntmNotasFaltasExcluir = new JMenuItem("Excluir");
+		mntmNotasFaltasExcluir.setHorizontalAlignment(SwingConstants.CENTER);
+		mnNotasFaltas.add(mntmNotasFaltasExcluir);
+
+		JMenuItem mntmNotasFaltasConsultar = new JMenuItem("Consultar");
+		mntmNotasFaltasConsultar.setHorizontalAlignment(SwingConstants.CENTER);
+		mnNotasFaltas.add(mntmNotasFaltasConsultar);
+
+		JMenu mnAjuda = new JMenu("Ajuda");
+		menuBar.add(mnAjuda);
+
+		JMenuItem mntmAjudaSobre = new JMenuItem("Sobre");
+		mntmAjudaSobre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"Projeto MVC - Cadastro de Aluno \n\n Integrantes do grupo: \n Gabriel Araujo de Jesus \n Gabriel Takuya Yamamoto");
+			}
+		});
+		mntmAjudaSobre.setHorizontalAlignment(SwingConstants.CENTER);
+		mnAjuda.add(mntmAjudaSobre);
+
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
