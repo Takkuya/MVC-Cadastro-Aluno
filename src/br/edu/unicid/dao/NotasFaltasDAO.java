@@ -3,7 +3,11 @@ package br.edu.unicid.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import br.edu.unicid.model.Aluno;
 import br.edu.unicid.model.NotasFaltas;
 import br.edu.unicid.util.ConnectionFactory;
 
@@ -84,6 +88,35 @@ public class NotasFaltasDAO {
 			preparedStatement.executeUpdate();
 		} catch (Exception err) {
 			System.err.println("Ocorreu um erro ao alterar a nota: " + err.getMessage());
+		} finally {
+			ConnectionFactory.closeConnection(connection, preparedStatement);
+		}
+	}
+
+	public List<NotasFaltas> listarNota(String rgm) throws Exception {
+		List<NotasFaltas> notasFaltasArr = new ArrayList<NotasFaltas>();
+
+		try {
+			String sql = "SELECT * FROM Notas_e_faltas WHERE RGM_aluno = ?";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, rgm);
+
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				String disciplina = resultSet.getString("disciplina");
+				String semestre = resultSet.getString("semestre");
+				String nota = resultSet.getString("nota");
+				String falta = resultSet.getString("falta");
+				String rgmAluno = resultSet.getString("RGM_aluno");
+
+				notasFaltas = new NotasFaltas(disciplina, semestre, nota, falta, rgmAluno);
+
+				notasFaltasArr.add(notasFaltas);
+			}
+			return notasFaltasArr;
+		} catch (Exception err) {
+			throw new Exception("Erro ao listar todas as notas: " + err.getMessage());
 		} finally {
 			ConnectionFactory.closeConnection(connection, preparedStatement);
 		}

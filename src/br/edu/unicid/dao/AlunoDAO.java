@@ -124,12 +124,13 @@ public class AlunoDAO {
 		return aluno;
 	}
 
-	public List listarTodos() throws Exception {
+	public List listarAluno(String rgmProcurado) throws Exception {
 		List<Aluno> alunoArr = new ArrayList<Aluno>();
 
 		try {
-			String sql = "SELECT * FROM aluno";
+			String sql = "SELECT * FROM aluno WHERE RGM = ?";
 			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, rgmProcurado);
 
 			resultSet = preparedStatement.executeQuery();
 
@@ -156,11 +157,13 @@ public class AlunoDAO {
 			System.out.println(alunoArr);
 			return alunoArr;
 		} catch (Exception err) {
-			throw new Exception("Erro ao listar todos os alunos: " + err.getMessage());
+			throw new Exception("Erro ao listar aluno: " + err.getMessage());
 		} finally {
 			ConnectionFactory.closeConnection(connection, preparedStatement);
 		}
 	}
+	
+	
 
 	public void alterar(Aluno aluno) throws Exception {
 		try {

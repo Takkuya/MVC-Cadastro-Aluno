@@ -31,19 +31,34 @@ VALUES
  
 SELECT * FROM aluno;
 
+DELETE FROM aluno WHERE 1=1;
+
+
 -- DROP TABLE aluno;
 
 CREATE TABLE Notas_e_faltas (
   id INT(11) NOT NULL AUTO_INCREMENT,
   disciplina VARCHAR(50) NOT NULL,
-  semestre VARCHAR(4) NOT NULL,
-  nota DECIMAL(4,2) NOT NULL,
+  semestre VARCHAR(6) NOT NULL,
+  nota DECIMAL(3,1) NOT NULL,
   falta INT(11) NOT NULL,
-  RGM_aluno INT(8) NOT NULL,
+  RGM_aluno CHAR(8) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (RGM_aluno) REFERENCES aluno(RGM)
 );
 
+DROP TABLE Notas_e_faltas;
 
+INSERT INTO Notas_e_faltas (disciplina, semestre, nota, falta, RGM_aluno)
+VALUES 
+('Matemática', '2022/1', 8.5, 3, 12312213
+),
+('Física', '2022/1', 7.8, 1, 23543454
+),
+('Química', '2022/1', 6.9, 2, 33123122
+),
+('História', '2021/2', 9.1, 0, 34545633),
+('Geografia', '2021/2', 7.2, 1, 76456454);
 
+SELECT * FROM Notas_e_faltas;
 

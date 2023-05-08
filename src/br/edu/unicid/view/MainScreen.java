@@ -38,11 +38,18 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import br.com.exemplo.dao.LeitorDAO;
+import br.com.exemplo.model.Leitor;
 import br.edu.unicid.dao.AlunoDAO;
 import br.edu.unicid.dao.NotasFaltasDAO;
 import br.edu.unicid.model.Aluno;
 import br.edu.unicid.model.NotasFaltas;
 import br.edu.unicid.utilities.ViewAlunoMethods;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.JTextArea;
+import java.awt.TextArea;
 
 public class MainScreen extends JFrame {
 	private JPanel contentPane;
@@ -76,7 +83,7 @@ public class MainScreen extends JFrame {
 	 */
 	public MainScreen() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 499, 308);
+		setBounds(100, 100, 729, 483);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,7 +92,7 @@ public class MainScreen extends JFrame {
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(5, 5, 469, 244);
+		tabbedPane.setBounds(5, 5, 700, 400);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(tabbedPane);
 
@@ -103,17 +110,17 @@ public class MainScreen extends JFrame {
 		String rgmMask = "########";
 
 		formattedTextFieldRgm = new JFormattedTextField(new MaskFormatter(rgmMask));
-		formattedTextFieldRgm.setBounds(50, 11, 106, 20);
+		formattedTextFieldRgm.setBounds(50, 11, 176, 20);
 		formattedTextFieldRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldRgm);
 
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(180, 11, 39, 17);
+		lblNome.setBounds(236, 13, 39, 17);
 		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelDadosPessoais.add(lblNome);
 
 		JFormattedTextField formattedTextFieldNome = new JFormattedTextField();
-		formattedTextFieldNome.setBounds(229, 9, 225, 20);
+		formattedTextFieldNome.setBounds(285, 11, 225, 20);
 		formattedTextFieldNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldNome);
 
@@ -463,8 +470,9 @@ public class MainScreen extends JFrame {
 
 		comboBoxCursoDisciplina = new JComboBox();
 		comboBoxCursoDisciplina.setBounds(79, 70, 375, 22);
-		comboBoxCursoDisciplina.setModel(new DefaultComboBoxModel(new String[] {
-				"Análise e Desenvolvimento de Sistemas", "Administração", "Ciência da Computação", "Medicina" }));
+		comboBoxCursoDisciplina.setModel(new DefaultComboBoxModel(new String[] { "Programação Orientada a objetos",
+				"Introdução ao Java", "Programação Web", "Introdução ao ReactJS", "O que são frameworks",
+				"Tratamento de Dados utilizando pandas e numpy" }));
 		comboBoxCursoDisciplina.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelNotasEFaltas.add(comboBoxCursoDisciplina);
 
@@ -546,7 +554,7 @@ public class MainScreen extends JFrame {
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.alterar(notasFaltas);
-					
+
 					JOptionPane.showMessageDialog(null, "Informações alteradas com sucesso!!");
 				} catch (Exception err) {
 					System.err.println("Erro ao alterar nota:" + err.getMessage());
@@ -620,6 +628,63 @@ public class MainScreen extends JFrame {
 		JPanel panelBoletim = new JPanel();
 		panelBoletim.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tabbedPane.addTab("Boletim", null, panelBoletim, null);
+		panelBoletim.setLayout(null);
+
+		JLabel lblBoletimRgm = new JLabel("Informe o RGM:");
+		lblBoletimRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBoletimRgm.setBounds(10, 11, 97, 14);
+		panelBoletim.add(lblBoletimRgm);
+
+		JFormattedTextField formattedTextFieldBoletimRgm = new JFormattedTextField();
+		formattedTextFieldBoletimRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldBoletimRgm.setBounds(117, 10, 102, 20);
+		panelBoletim.add(formattedTextFieldBoletimRgm);
+
+		TextArea textArea = new TextArea();
+		textArea.setFont(new Font("Tahoma", Font.BOLD, 14));
+		textArea.setBounds(10, 53, 675, 297);
+		panelBoletim.add(textArea);
+
+		JButton btnProcurar = new JButton("Procurar");
+		btnProcurar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					List<Aluno> alunoArr = new ArrayList<Aluno>();
+					List<NotasFaltas> notasFaltasArr = new ArrayList<NotasFaltas>();
+
+					alunoDAO = new AlunoDAO();
+					notasFaltasDAO = new NotasFaltasDAO();
+
+					alunoArr = alunoDAO.listarAluno(formattedTextFieldBoletimRgm.getText());
+					notasFaltasArr = notasFaltasDAO.listarNota(formattedTextFieldBoletimRgm.getText());
+					
+					textArea.append("---Informações do aluno---\n");
+					for (Aluno aluno : alunoArr) {
+					    if (aluno.getRgm().equals(formattedTextFieldBoletimRgm.getText())) {
+					        textArea.append("RGM do aluno...  " + aluno.getRgm() + "\n");
+					        textArea.append("Nome do aluno...  " + aluno.getNome() + "\n");
+					        textArea.append("Curso do aluno...  " + aluno.getCurso() + "\n\n");
+					    }
+					}
+
+					textArea.append("---Notas do aluno---\n");
+					for (NotasFaltas notasFaltas : notasFaltasArr) {
+					    if (notasFaltas.getRgmAluno().equals(formattedTextFieldBoletimRgm.getText())) {
+					        textArea.append("Disciplina do aluno...  " + notasFaltas.getDisciplina() + "\n");
+					        textArea.append("Semestre do curso...  " + notasFaltas.getSemestre() + "\n");
+					        textArea.append("Nota da disciplina...  " + notasFaltas.getNota() + "\n");
+					        textArea.append("Faltas da disciplina...  " + notasFaltas.getFalta() + "\n\n");
+					    }
+					}
+
+				} catch (Exception err) {
+					System.out.println(err.getMessage());
+				}
+			}
+		});
+		btnProcurar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnProcurar.setBounds(352, 9, 89, 23);
+		panelBoletim.add(btnProcurar);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
