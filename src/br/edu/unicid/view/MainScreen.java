@@ -286,6 +286,7 @@ public class MainScreen extends JFrame {
 				formattedTextFieldCelular };
 		JComboBox[] comboBoxes = { comboBoxCurso, comboCampus, comboBoxUf };
 
+		// salvar aluno
 		JButton btnSave = new JButton(saveIcon);
 		btnSave.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnSave.addActionListener(new ActionListener() {
@@ -312,9 +313,10 @@ public class MainScreen extends JFrame {
 		});
 
 		btnSave.setToolTipText("Salvar");
-		btnSave.setBounds(40, 168, 100, 100);
+		btnSave.setBounds(25, 168, 100, 100);
 		panelCurso.add(btnSave);
 
+		// alterar aluno
 		JButton btnUpdate = new JButton(editIcon);
 		btnUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnUpdate.setToolTipText("Alterar");
@@ -341,9 +343,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 
-		btnUpdate.setBounds(150, 168, 100, 100);
+		btnUpdate.setBounds(135, 168, 100, 100);
 		panelCurso.add(btnUpdate);
 
+		// consultar aluno
 		JButton btnGet = new JButton(searchIcon);
 		btnGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnGet.addActionListener(new ActionListener() {
@@ -390,9 +393,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnGet.setToolTipText("Procurar");
-		btnGet.setBounds(260, 168, 100, 100);
+		btnGet.setBounds(245, 168, 100, 100);
 		panelCurso.add(btnGet);
 
+		// deletar aluno
 		JButton btnDelete = new JButton(trashIcon);
 		btnDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnDelete.addActionListener(new ActionListener() {
@@ -401,9 +405,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnDelete.setToolTipText("Deletar");
-		btnDelete.setBounds(370, 168, 100, 100);
+		btnDelete.setBounds(355, 168, 100, 100);
 		panelCurso.add(btnDelete);
 
+		// limpar os campos do aluno
 		JButton btnCleanFields = new JButton("Limpar Campos");
 		btnCleanFields.setFont(new Font("Roboto", Font.BOLD, 16));
 		btnCleanFields.addActionListener(new ActionListener() {
@@ -423,7 +428,7 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnCleanFields.setToolTipText("Limpar campos");
-		btnCleanFields.setBounds(480, 168, 150, 100);
+		btnCleanFields.setBounds(465, 168, 174, 100);
 		panelCurso.add(btnCleanFields);
 
 		JPanel panelNotasEFaltas = new JPanel();
@@ -493,18 +498,37 @@ public class MainScreen extends JFrame {
 		lblFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblFaltas);
 
-		JFormattedTextField formattedTextFieldFaltas = new JFormattedTextField();
+		JFormattedTextField formattedTextFieldFaltas = new JFormattedTextField(new MaskFormatter(rgmMask));
 		formattedTextFieldFaltas.setBounds(414, 137, 240, 25);
 		formattedTextFieldFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(formattedTextFieldFaltas);
 
+		// salvar notas
 		JButton btnNotasSave = new JButton(saveIcon);
 		btnNotasSave.setFont(new Font("Roboto", Font.PLAIN, 16));
-		btnNotasSave.setBounds(36, 198, 100, 100);
+		btnNotasSave.setBounds(26, 198, 100, 100);
 		btnNotasSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					alunoDAO = new AlunoDAO();
+
+//					Aluno alunoExists = alunoDAO.verificarSeAlunoExiste(formattedTextFieldRgmNotas.getText());
+//
+//					// se o aluno já existe
+//					if (alunoExists != null) {
+//						JOptionPane.showMessageDialog(null, "Já existe um aluno cadastrado com o mesmo RGM");
+//						return;
+//					}
+
 					notasFaltasDAO = new NotasFaltasDAO();
+
+					if (notasFaltasDAO.verificarDisciplinaSemestreExistente(
+							comboBoxCursoDisciplina.getSelectedItem().toString(), comboNota.getSelectedItem().toString(),
+							formattedTextFieldFaltas.getText())) {
+						JOptionPane.showMessageDialog(null, "A disciplina e o semestre já existem para este aluno!");
+						return;
+					}
+					
 					notasFaltas = new NotasFaltas();
 
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
@@ -517,11 +541,6 @@ public class MainScreen extends JFrame {
 
 					JOptionPane.showMessageDialog(null, "Informações inseridas com sucesso!!");
 				} catch (Exception err) {
-//					System.out.println("disciplina..." + comboBoxCursoDisciplina.getSelectedItem().toString());
-//					System.out.println("semestre..." + comboBoxSemestre.getSelectedItem().toString());
-//					System.out.println("nota..." + comboNota.getSelectedItem().toString());
-//					System.out.println("falta..." + notasFaltas.getFalta());
-//					System.out.println("rgm..." + formattedTextFieldRgmNotas.getText());
 					System.err.println("Ocorreu um erro ao salvar a nota: " + err.getMessage());
 				}
 			}
@@ -529,6 +548,7 @@ public class MainScreen extends JFrame {
 		btnNotasSave.setToolTipText("Salvar");
 		panelNotasEFaltas.add(btnNotasSave);
 
+		// alterar notas
 		JButton btnNotasUpdate = new JButton(editIcon);
 		btnNotasUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasUpdate.addActionListener(new ActionListener() {
@@ -552,9 +572,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasUpdate.setToolTipText("Alterar");
-		btnNotasUpdate.setBounds(146, 198, 100, 100);
+		btnNotasUpdate.setBounds(136, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasUpdate);
 
+		// consultar notas
 		JButton btnNotasGet = new JButton(searchIcon);
 		btnNotasGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasGet.addActionListener(new ActionListener() {
@@ -573,9 +594,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasGet.setToolTipText("Listar");
-		btnNotasGet.setBounds(260, 198, 100, 100);
+		btnNotasGet.setBounds(250, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasGet);
 
+		// deletar notas
 		JButton btnNotasDelete = new JButton(trashIcon);
 		btnNotasDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasDelete.addActionListener(new ActionListener() {
@@ -596,9 +618,10 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasDelete.setToolTipText("Deletar");
-		btnNotasDelete.setBounds(370, 198, 100, 100);
+		btnNotasDelete.setBounds(360, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasDelete);
 
+		// limpar campos de notas
 		JButton btnNotasCleanFields = new JButton(xIcon);
 		btnNotasCleanFields.setFont(new Font("Roboto", Font.BOLD, 16));
 		btnNotasCleanFields.addActionListener(new ActionListener() {
@@ -615,7 +638,7 @@ public class MainScreen extends JFrame {
 		});
 		btnNotasCleanFields.setText("Limpar Campos");
 		btnNotasCleanFields.setToolTipText("Limpar Campos");
-		btnNotasCleanFields.setBounds(480, 198, 150, 100);
+		btnNotasCleanFields.setBounds(470, 198, 174, 100);
 		panelNotasEFaltas.add(btnNotasCleanFields);
 
 		JPanel panelBoletim = new JPanel();
@@ -643,6 +666,9 @@ public class MainScreen extends JFrame {
 		btnProcurar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					// limpar todos os campos em cada consulta
+					textArea.setText(null);
+
 					List<Aluno> alunoArr = new ArrayList<Aluno>();
 					List<NotasFaltas> notasFaltasArr = new ArrayList<NotasFaltas>();
 
@@ -650,6 +676,13 @@ public class MainScreen extends JFrame {
 					notasFaltasDAO = new NotasFaltasDAO();
 
 					alunoArr = alunoDAO.listarAluno(formattedTextFieldBoletimRgm.getText());
+
+					// verificar se o aluno/rgm existe
+					if (alunoArr.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Não existe um aluno com esse RGM.");
+						return; // para interromper o fluxo do método, caso o RGM seja inválido
+					}
+
 					notasFaltasArr = notasFaltasDAO.listarNota(formattedTextFieldBoletimRgm.getText());
 
 					textArea.append("---Informações do aluno---\n");

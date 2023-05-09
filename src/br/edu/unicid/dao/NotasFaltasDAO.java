@@ -25,6 +25,21 @@ public class NotasFaltasDAO {
 		}
 	}
 
+	// Verifica se a disciplina e o semestre já existem no banco de dados para
+	// determinado aluno
+	public boolean verificarDisciplinaSemestreExistente(String rgm, String disciplina, String semestre)
+			throws Exception {
+		String sql = "SELECT * FROM notas_faltas WHERE rgm_aluno = ? AND disciplina = ? AND semestre = ?";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, rgm);
+			preparedStatement.setString(2, disciplina);
+			preparedStatement.setString(3, semestre);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				return resultSet.next();
+			}
+		}
+	}
+
 	public void salvar(NotasFaltas notasFaltas) throws Exception {
 		if (notasFaltas == null)
 			throw new Exception("O valor passado nao pode ser nulo");
