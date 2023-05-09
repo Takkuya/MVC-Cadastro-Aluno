@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
+import javax.swing.*;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -38,18 +38,13 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
-import br.com.exemplo.dao.LeitorDAO;
-import br.com.exemplo.model.Leitor;
 import br.edu.unicid.dao.AlunoDAO;
 import br.edu.unicid.dao.NotasFaltasDAO;
 import br.edu.unicid.model.Aluno;
 import br.edu.unicid.model.NotasFaltas;
 import br.edu.unicid.utilities.ViewAlunoMethods;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.JTextArea;
 import java.awt.TextArea;
+import java.awt.Dimension;
 
 public class MainScreen extends JFrame {
 	private JPanel contentPane;
@@ -83,7 +78,7 @@ public class MainScreen extends JFrame {
 	 */
 	public MainScreen() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 729, 483);
+		setBounds(100, 100, 700, 500);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -92,136 +87,124 @@ public class MainScreen extends JFrame {
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(5, 5, 700, 400);
+		tabbedPane.setBounds(5, 5, 669, 400);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		contentPane.add(tabbedPane);
 
 		JPanel panelDadosPessoais = new JPanel();
-		panelDadosPessoais.setFont(new Font("Tahoma", Font.BOLD, 14));
+		panelDadosPessoais.setFont(new Font("Roboto", Font.BOLD, 14));
 		panelDadosPessoais.setBorder(null);
 		tabbedPane.addTab("Dados Pessoais", null, panelDadosPessoais, null);
 		panelDadosPessoais.setLayout(null);
 
 		JLabel lblRgm = new JLabel("RGM");
-		lblRgm.setBounds(10, 11, 39, 17);
-		lblRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRgm.setBounds(10, 29, 39, 17);
+		lblRgm.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblRgm);
 
 		String rgmMask = "########";
 
 		formattedTextFieldRgm = new JFormattedTextField(new MaskFormatter(rgmMask));
-		formattedTextFieldRgm.setBounds(50, 11, 176, 20);
+		formattedTextFieldRgm.setBounds(66, 25, 233, 25);
 		formattedTextFieldRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldRgm);
 
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(236, 13, 39, 17);
-		lblNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNome.setBounds(310, 29, 47, 17);
+		lblNome.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblNome);
 
 		JFormattedTextField formattedTextFieldNome = new JFormattedTextField();
-		formattedTextFieldNome.setBounds(285, 11, 225, 20);
-		formattedTextFieldNome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldNome.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldNome.setBounds(357, 26, 298, 25);
+		formattedTextFieldNome.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldNome);
 
 		JLabel lblDataNascimento = new JLabel("Data de Nascimento");
-		lblDataNascimento.setBounds(10, 41, 123, 17);
-		lblDataNascimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDataNascimento.setBounds(10, 70, 147, 17);
+		lblDataNascimento.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblDataNascimento);
 
 		String dateMask = "####/##/##";
 
 		JFormattedTextField formattedTextFieldDataNascimento = new JFormattedTextField(new MaskFormatter(dateMask));
-		formattedTextFieldDataNascimento.setBounds(143, 41, 106, 20);
-		formattedTextFieldDataNascimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldDataNascimento.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldDataNascimento.setBounds(167, 67, 133, 25);
+		formattedTextFieldDataNascimento.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldDataNascimento);
 
 		JLabel lblCpf = new JLabel("CPF");
-		lblCpf.setBounds(273, 41, 32, 17);
-		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCpf.setBounds(310, 70, 39, 17);
+		lblCpf.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblCpf);
 
 		String cpfMask = "###.###.###-##";
 
 		JFormattedTextField formattedTextFieldCpf = new JFormattedTextField(new MaskFormatter(cpfMask));
-		formattedTextFieldCpf.setBounds(310, 40, 144, 20);
-		formattedTextFieldCpf.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldCpf.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldCpf.setBounds(357, 67, 182, 25);
+		formattedTextFieldCpf.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldCpf);
 
 		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setBounds(10, 73, 39, 17);
-		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEmail.setBounds(9, 109, 47, 17);
+		lblEmail.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblEmail);
 
 		JFormattedTextField formattedTextFieldEmail = new JFormattedTextField();
-		formattedTextFieldEmail.setBounds(50, 71, 404, 20);
-		formattedTextFieldEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldEmail.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldEmail.setBounds(66, 105, 588, 25);
+		formattedTextFieldEmail.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldEmail);
 
 		JLabel lblEndereco = new JLabel("End.");
-		lblEndereco.setBounds(10, 101, 39, 17);
-		lblEndereco.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEndereco.setBounds(10, 154, 39, 17);
+		lblEndereco.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblEndereco);
 
 		JFormattedTextField formattedTextFieldEnd = new JFormattedTextField();
-		formattedTextFieldEnd.setBounds(50, 101, 404, 20);
-		formattedTextFieldEnd.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldEnd.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldEnd.setBounds(66, 151, 589, 25);
+		formattedTextFieldEnd.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldEnd);
 
 		JLabel lblMunicipio = new JLabel("Município");
-		lblMunicipio.setBounds(10, 132, 65, 17);
-		lblMunicipio.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblMunicipio.setBounds(10, 192, 70, 17);
+		lblMunicipio.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblMunicipio);
 
 		JFormattedTextField formattedTextFieldMunicipio = new JFormattedTextField();
-		formattedTextFieldMunicipio.setBounds(76, 132, 80, 20);
-		formattedTextFieldMunicipio.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldMunicipio.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldMunicipio.setBounds(90, 189, 80, 25);
+		formattedTextFieldMunicipio.setFont(new Font("Roboto", Font.PLAIN, 14));
 		panelDadosPessoais.add(formattedTextFieldMunicipio);
 
 		JLabel lblUf = new JLabel("UF");
-		lblUf.setBounds(166, 132, 23, 17);
-		lblUf.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblUf.setBounds(195, 192, 23, 17);
+		lblUf.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblUf);
 
 		JComboBox<String> comboBoxUf = new JComboBox<String>();
-		comboBoxUf.setBounds(189, 132, 60, 22);
+		comboBoxUf.setFont(new Font("Roboto", Font.PLAIN, 14));
+		comboBoxUf.setBounds(226, 189, 60, 25);
 		comboBoxUf.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MS", "MT", "MG", "PA", "PB",
 						"PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
 		panelDadosPessoais.add(comboBoxUf);
 
 		JLabel lblCelular = new JLabel("Celular");
-		lblCelular.setBounds(258, 132, 47, 17);
-		lblCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCelular.setBounds(308, 192, 60, 17);
+		lblCelular.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelDadosPessoais.add(lblCelular);
 
 		String phoneMask = "(##)#####-####";
 
 		JFormattedTextField formattedTextFieldCelular = new JFormattedTextField(new MaskFormatter(phoneMask));
-		formattedTextFieldCelular.setBounds(310, 132, 144, 20);
-		formattedTextFieldCelular.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldCelular.setMinimumSize(new Dimension(7, 25));
+		formattedTextFieldCelular.setBounds(372, 189, 168, 25);
+		formattedTextFieldCelular.setFont(new Font("Roboto", Font.PLAIN, 14));
 
 		panelDadosPessoais.add(formattedTextFieldCelular);
-
-		JButton btnNewButton = new JButton("Mostrar alunos teste11");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					List<Aluno> lista = new ArrayList<Aluno>();
-					alunoDAO = new AlunoDAO();
-					lista = alunoDAO.listarTodos();
-
-					for (Aluno aluno : lista) {
-						System.out.println("Nome... " + aluno.getNome() + "\n");
-					}
-
-				} catch (Exception err) {
-					System.out.println(err.getMessage());
-				}
-			}
-		});
-		btnNewButton.setBounds(112, 163, 209, 23);
-		panelDadosPessoais.add(btnNewButton);
 
 		JPanel panelCurso = new JPanel();
 		panelCurso.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -229,31 +212,31 @@ public class MainScreen extends JFrame {
 		panelCurso.setLayout(null);
 
 		JLabel lblCurso = new JLabel("Curso");
-		lblCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCurso.setBounds(10, 11, 46, 14);
+		lblCurso.setFont(new Font("Roboto", Font.PLAIN, 16));
+		lblCurso.setBounds(10, 24, 46, 14);
 		panelCurso.add(lblCurso);
 
 		JComboBox<String> comboBoxCurso = new JComboBox<String>();
 		comboBoxCurso.setModel(new DefaultComboBoxModel<String>(new String[] { "Análise e Desenvolvimento de Sistemas",
 				"Administração", "Ciência da Computação", "Medicina" }));
-		comboBoxCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		comboBoxCurso.setBounds(69, 9, 385, 22);
+		comboBoxCurso.setFont(new Font("Roboto", Font.PLAIN, 16));
+		comboBoxCurso.setBounds(78, 22, 573, 25);
 		panelCurso.add(comboBoxCurso);
 
 		JLabel lblCampus = new JLabel("Campus");
-		lblCampus.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCampus.setBounds(10, 43, 58, 22);
+		lblCampus.setFont(new Font("Roboto", Font.PLAIN, 16));
+		lblCampus.setBounds(10, 61, 61, 22);
 		panelCurso.add(lblCampus);
 
 		JComboBox<String> comboCampus = new JComboBox<String>();
 		comboCampus.setModel(new DefaultComboBoxModel<String>(new String[] { "Tatuapé", "Pinheiros" }));
-		comboCampus.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		comboCampus.setBounds(69, 44, 385, 22);
+		comboCampus.setFont(new Font("Roboto", Font.PLAIN, 16));
+		comboCampus.setBounds(78, 60, 573, 25);
 		panelCurso.add(comboCampus);
 
 		JLabel lblPeriodo = new JLabel("Período");
-		lblPeriodo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPeriodo.setBounds(10, 84, 58, 14);
+		lblPeriodo.setFont(new Font("Roboto", Font.PLAIN, 16));
+		lblPeriodo.setBounds(10, 102, 58, 14);
 		panelCurso.add(lblPeriodo);
 
 		ButtonGroup radioBtnGroup = new ButtonGroup();
@@ -264,8 +247,8 @@ public class MainScreen extends JFrame {
 				selectedPeriodo = "Matutino";
 			}
 		});
-		rdbtnMatutino.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		rdbtnMatutino.setBounds(90, 82, 79, 23);
+		rdbtnMatutino.setFont(new Font("Roboto", Font.PLAIN, 16));
+		rdbtnMatutino.setBounds(78, 98, 95, 23);
 		panelCurso.add(rdbtnMatutino);
 
 		JRadioButton rdbtnVespertino = new JRadioButton("Vespertino");
@@ -274,8 +257,8 @@ public class MainScreen extends JFrame {
 				selectedPeriodo = "Vespertino";
 			}
 		});
-		rdbtnVespertino.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		rdbtnVespertino.setBounds(188, 82, 95, 23);
+		rdbtnVespertino.setFont(new Font("Roboto", Font.PLAIN, 16));
+		rdbtnVespertino.setBounds(192, 98, 107, 23);
 		panelCurso.add(rdbtnVespertino);
 
 		JRadioButton rdbtnNoturno = new JRadioButton("Noturno");
@@ -284,8 +267,8 @@ public class MainScreen extends JFrame {
 				selectedPeriodo = "Noturno";
 			}
 		});
-		rdbtnNoturno.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		rdbtnNoturno.setBounds(302, 82, 95, 23);
+		rdbtnNoturno.setFont(new Font("Roboto", Font.PLAIN, 16));
+		rdbtnNoturno.setBounds(324, 98, 95, 23);
 		panelCurso.add(rdbtnNoturno);
 
 		ImageIcon saveIcon = new ImageIcon("assets/FloppyDiskBack.png");
@@ -304,6 +287,7 @@ public class MainScreen extends JFrame {
 		JComboBox[] comboBoxes = { comboBoxCurso, comboCampus, comboBoxUf };
 
 		JButton btnSave = new JButton(saveIcon);
+		btnSave.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -328,10 +312,11 @@ public class MainScreen extends JFrame {
 		});
 
 		btnSave.setToolTipText("Salvar");
-		btnSave.setBounds(10, 121, 70, 70);
+		btnSave.setBounds(40, 168, 100, 100);
 		panelCurso.add(btnSave);
 
 		JButton btnUpdate = new JButton(editIcon);
+		btnUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnUpdate.setToolTipText("Alterar");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -356,10 +341,11 @@ public class MainScreen extends JFrame {
 			}
 		});
 
-		btnUpdate.setBounds(90, 121, 70, 70);
+		btnUpdate.setBounds(150, 168, 100, 100);
 		panelCurso.add(btnUpdate);
 
 		JButton btnGet = new JButton(searchIcon);
+		btnGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnGet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -404,20 +390,22 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnGet.setToolTipText("Procurar");
-		btnGet.setBounds(170, 121, 70, 70);
+		btnGet.setBounds(260, 168, 100, 100);
 		panelCurso.add(btnGet);
 
 		JButton btnDelete = new JButton(trashIcon);
+		btnDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
 			}
 		});
 		btnDelete.setToolTipText("Deletar");
-		btnDelete.setBounds(249, 121, 70, 70);
+		btnDelete.setBounds(370, 168, 100, 100);
 		panelCurso.add(btnDelete);
 
 		JButton btnCleanFields = new JButton("Limpar Campos");
+		btnCleanFields.setFont(new Font("Roboto", Font.BOLD, 16));
 		btnCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formattedTextFieldRgm.setText(null);
@@ -435,7 +423,7 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnCleanFields.setToolTipText("Limpar campos");
-		btnCleanFields.setBounds(329, 121, 125, 70);
+		btnCleanFields.setBounds(480, 168, 150, 100);
 		panelCurso.add(btnCleanFields);
 
 		JPanel panelNotasEFaltas = new JPanel();
@@ -444,74 +432,75 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.setLayout(null);
 
 		JLabel lblRgm_1 = new JLabel("RGM");
-		lblRgm_1.setBounds(10, 13, 39, 17);
-		lblRgm_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRgm_1.setBounds(10, 30, 39, 17);
+		lblRgm_1.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblRgm_1);
 
 		JFormattedTextField formattedTextFieldRgmNotas = new JFormattedTextField(new MaskFormatter(rgmMask));
-		formattedTextFieldRgmNotas.setBounds(51, 11, 149, 20);
-		formattedTextFieldRgmNotas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldRgmNotas.setBounds(59, 26, 260, 25);
+		formattedTextFieldRgmNotas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(formattedTextFieldRgmNotas);
 
 		JFormattedTextField formattedTextFieldNomeAluno = new JFormattedTextField();
-		formattedTextFieldNomeAluno.setBounds(210, 11, 244, 20);
-		formattedTextFieldNomeAluno.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldNomeAluno.setBounds(339, 26, 315, 25);
+		formattedTextFieldNomeAluno.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(formattedTextFieldNomeAluno);
 
 		JFormattedTextField formattedTextFieldCursoAluno = new JFormattedTextField();
-		formattedTextFieldCursoAluno.setBounds(10, 39, 444, 20);
-		formattedTextFieldCursoAluno.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldCursoAluno.setBounds(59, 62, 595, 25);
+		formattedTextFieldCursoAluno.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(formattedTextFieldCursoAluno);
 
 		JLabel lblDisciplina = new JLabel("Disciplina");
-		lblDisciplina.setBounds(10, 73, 54, 17);
-		lblDisciplina.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDisciplina.setBounds(10, 101, 70, 17);
+		lblDisciplina.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblDisciplina);
 
 		comboBoxCursoDisciplina = new JComboBox();
-		comboBoxCursoDisciplina.setBounds(79, 70, 375, 22);
+		comboBoxCursoDisciplina.setBounds(90, 98, 564, 25);
 		comboBoxCursoDisciplina.setModel(new DefaultComboBoxModel(new String[] { "Programação Orientada a objetos",
 				"Introdução ao Java", "Programação Web", "Introdução ao ReactJS", "O que são frameworks",
 				"Tratamento de Dados utilizando pandas e numpy" }));
-		comboBoxCursoDisciplina.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboBoxCursoDisciplina.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(comboBoxCursoDisciplina);
 
 		JLabel lblSemestre = new JLabel("Semestre");
-		lblSemestre.setBounds(10, 109, 62, 17);
-		lblSemestre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSemestre.setBounds(10, 141, 70, 17);
+		lblSemestre.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblSemestre);
 
 		JComboBox comboBoxSemestre = new JComboBox();
-		comboBoxSemestre.setBounds(79, 106, 80, 22);
+		comboBoxSemestre.setBounds(90, 137, 100, 25);
 		comboBoxSemestre.setModel(new DefaultComboBoxModel(new String[] { "2020-1", "2020-2", "2021-1", "2021-2",
 				"2022-1", "2022-2", "2023-1", "2023-2", "2024-1", "2024-2" }));
-		comboBoxSemestre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboBoxSemestre.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(comboBoxSemestre);
 
 		JComboBox comboNota = new JComboBox();
-		comboNota.setBounds(227, 106, 62, 22);
+		comboNota.setBounds(260, 137, 78, 25);
 		comboNota.setModel(new DefaultComboBoxModel(new String[] { "0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4",
 				"4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10" }));
-		comboNota.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		comboNota.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(comboNota);
 
 		JLabel lblNota = new JLabel("Nota");
-		lblNota.setBounds(183, 109, 39, 17);
-		lblNota.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNota.setBounds(211, 141, 39, 17);
+		lblNota.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblNota);
 
 		JLabel lblFaltas = new JLabel("Faltas");
-		lblFaltas.setBounds(311, 109, 39, 17);
-		lblFaltas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblFaltas.setBounds(360, 141, 44, 17);
+		lblFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblFaltas);
 
 		JFormattedTextField formattedTextFieldFaltas = new JFormattedTextField();
-		formattedTextFieldFaltas.setBounds(354, 109, 100, 20);
-		formattedTextFieldFaltas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		formattedTextFieldFaltas.setBounds(414, 137, 240, 25);
+		formattedTextFieldFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(formattedTextFieldFaltas);
 
 		JButton btnNotasSave = new JButton(saveIcon);
-		btnNotasSave.setBounds(10, 140, 70, 70);
+		btnNotasSave.setFont(new Font("Roboto", Font.PLAIN, 16));
+		btnNotasSave.setBounds(36, 198, 100, 100);
 		btnNotasSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -541,6 +530,7 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(btnNotasSave);
 
 		JButton btnNotasUpdate = new JButton(editIcon);
+		btnNotasUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -562,10 +552,11 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasUpdate.setToolTipText("Alterar");
-		btnNotasUpdate.setBounds(90, 140, 70, 70);
+		btnNotasUpdate.setBounds(146, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasUpdate);
 
 		JButton btnNotasGet = new JButton(searchIcon);
+		btnNotasGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasGet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -582,10 +573,11 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasGet.setToolTipText("Listar");
-		btnNotasGet.setBounds(170, 140, 70, 70);
+		btnNotasGet.setBounds(260, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasGet);
 
 		JButton btnNotasDelete = new JButton(trashIcon);
+		btnNotasDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -604,10 +596,11 @@ public class MainScreen extends JFrame {
 			}
 		});
 		btnNotasDelete.setToolTipText("Deletar");
-		btnNotasDelete.setBounds(249, 140, 70, 70);
+		btnNotasDelete.setBounds(370, 198, 100, 100);
 		panelNotasEFaltas.add(btnNotasDelete);
 
 		JButton btnNotasCleanFields = new JButton(xIcon);
+		btnNotasCleanFields.setFont(new Font("Roboto", Font.BOLD, 16));
 		btnNotasCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formattedTextFieldRgmNotas.setText(null);
@@ -622,7 +615,7 @@ public class MainScreen extends JFrame {
 		});
 		btnNotasCleanFields.setText("Limpar Campos");
 		btnNotasCleanFields.setToolTipText("Limpar Campos");
-		btnNotasCleanFields.setBounds(329, 140, 125, 70);
+		btnNotasCleanFields.setBounds(480, 198, 150, 100);
 		panelNotasEFaltas.add(btnNotasCleanFields);
 
 		JPanel panelBoletim = new JPanel();
@@ -631,18 +624,19 @@ public class MainScreen extends JFrame {
 		panelBoletim.setLayout(null);
 
 		JLabel lblBoletimRgm = new JLabel("Informe o RGM:");
-		lblBoletimRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblBoletimRgm.setBounds(10, 11, 97, 14);
+		lblBoletimRgm.setFont(new Font("Roboto", Font.PLAIN, 16));
+		lblBoletimRgm.setBounds(10, 19, 119, 14);
 		panelBoletim.add(lblBoletimRgm);
 
 		JFormattedTextField formattedTextFieldBoletimRgm = new JFormattedTextField();
-		formattedTextFieldBoletimRgm.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		formattedTextFieldBoletimRgm.setBounds(117, 10, 102, 20);
+		formattedTextFieldBoletimRgm.setFont(new Font("Roboto", Font.PLAIN, 16));
+		formattedTextFieldBoletimRgm.setBounds(131, 14, 102, 25);
 		panelBoletim.add(formattedTextFieldBoletimRgm);
 
 		TextArea textArea = new TextArea();
-		textArea.setFont(new Font("Tahoma", Font.BOLD, 14));
-		textArea.setBounds(10, 53, 675, 297);
+		textArea.setEditable(false);
+		textArea.setFont(new Font("Roboto", Font.PLAIN, 16));
+		textArea.setBounds(10, 61, 644, 301);
 		panelBoletim.add(textArea);
 
 		JButton btnProcurar = new JButton("Procurar");
@@ -657,24 +651,24 @@ public class MainScreen extends JFrame {
 
 					alunoArr = alunoDAO.listarAluno(formattedTextFieldBoletimRgm.getText());
 					notasFaltasArr = notasFaltasDAO.listarNota(formattedTextFieldBoletimRgm.getText());
-					
+
 					textArea.append("---Informações do aluno---\n");
 					for (Aluno aluno : alunoArr) {
-					    if (aluno.getRgm().equals(formattedTextFieldBoletimRgm.getText())) {
-					        textArea.append("RGM do aluno...  " + aluno.getRgm() + "\n");
-					        textArea.append("Nome do aluno...  " + aluno.getNome() + "\n");
-					        textArea.append("Curso do aluno...  " + aluno.getCurso() + "\n\n");
-					    }
+						if (aluno.getRgm().equals(formattedTextFieldBoletimRgm.getText())) {
+							textArea.append("RGM do aluno...  " + aluno.getRgm() + "\n");
+							textArea.append("Nome do aluno...  " + aluno.getNome() + "\n");
+							textArea.append("Curso do aluno...  " + aluno.getCurso() + "\n\n");
+						}
 					}
 
 					textArea.append("---Notas do aluno---\n");
 					for (NotasFaltas notasFaltas : notasFaltasArr) {
-					    if (notasFaltas.getRgmAluno().equals(formattedTextFieldBoletimRgm.getText())) {
-					        textArea.append("Disciplina do aluno...  " + notasFaltas.getDisciplina() + "\n");
-					        textArea.append("Semestre do curso...  " + notasFaltas.getSemestre() + "\n");
-					        textArea.append("Nota da disciplina...  " + notasFaltas.getNota() + "\n");
-					        textArea.append("Faltas da disciplina...  " + notasFaltas.getFalta() + "\n\n");
-					    }
+						if (notasFaltas.getRgmAluno().equals(formattedTextFieldBoletimRgm.getText())) {
+							textArea.append("Disciplina do aluno...  " + notasFaltas.getDisciplina() + "\n");
+							textArea.append("Semestre do curso...  " + notasFaltas.getSemestre() + "\n");
+							textArea.append("Nota da disciplina...  " + notasFaltas.getNota() + "\n");
+							textArea.append("Faltas da disciplina...  " + notasFaltas.getFalta() + "\n");
+						}
 					}
 
 				} catch (Exception err) {
@@ -682,18 +676,20 @@ public class MainScreen extends JFrame {
 				}
 			}
 		});
-		btnProcurar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnProcurar.setBounds(352, 9, 89, 23);
+		btnProcurar.setFont(new Font("Roboto", Font.PLAIN, 16));
+		btnProcurar.setBounds(265, 14, 107, 25);
 		panelBoletim.add(btnProcurar);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		JMenu mnAluno = new JMenu("Aluno");
+		mnAluno.setFont(new Font("Roboto Medium", Font.PLAIN, 12));
 		mnAluno.setHorizontalAlignment(SwingConstants.LEFT);
 		menuBar.add(mnAluno);
 
 		JMenuItem mntmSalvar = new JMenuItem("Salvar");
+		mntmSalvar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -721,6 +717,7 @@ public class MainScreen extends JFrame {
 		mnAluno.add(mntmSalvar);
 
 		JMenuItem mntmAlterar = new JMenuItem("Alterar");
+		mntmAlterar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -747,6 +744,7 @@ public class MainScreen extends JFrame {
 		mnAluno.add(mntmAlterar);
 
 		JMenuItem mntmConsultar = new JMenuItem("Consultar");
+		mntmConsultar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -794,6 +792,7 @@ public class MainScreen extends JFrame {
 		mnAluno.add(mntmConsultar);
 
 		JMenuItem mntmExcluir = new JMenuItem("Excluir");
+		mntmExcluir.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
@@ -806,6 +805,7 @@ public class MainScreen extends JFrame {
 		mnAluno.add(separator_1);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Sair");
+		mntmNewMenuItem.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formattedTextFieldRgm.setText(null);
@@ -827,29 +827,36 @@ public class MainScreen extends JFrame {
 		mnAluno.add(mntmNewMenuItem);
 
 		JMenu mnNotasFaltas = new JMenu("Notas e Faltas");
+		mnNotasFaltas.setFont(new Font("Roboto", Font.PLAIN, 12));
 		menuBar.add(mnNotasFaltas);
 
 		JMenuItem mntmNotasFaltasSalvar = new JMenuItem("Salvar");
+		mntmNotasFaltasSalvar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmNotasFaltasSalvar.setHorizontalAlignment(SwingConstants.CENTER);
 		mnNotasFaltas.add(mntmNotasFaltasSalvar);
 
 		JMenuItem mntmNotasFaltasAlterar = new JMenuItem("Alterar");
+		mntmNotasFaltasAlterar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmNotasFaltasAlterar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
 		mntmNotasFaltasAlterar.setHorizontalAlignment(SwingConstants.CENTER);
 		mnNotasFaltas.add(mntmNotasFaltasAlterar);
 
 		JMenuItem mntmNotasFaltasExcluir = new JMenuItem("Excluir");
+		mntmNotasFaltasExcluir.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmNotasFaltasExcluir.setHorizontalAlignment(SwingConstants.CENTER);
 		mnNotasFaltas.add(mntmNotasFaltasExcluir);
 
 		JMenuItem mntmNotasFaltasConsultar = new JMenuItem("Consultar");
+		mntmNotasFaltasConsultar.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmNotasFaltasConsultar.setHorizontalAlignment(SwingConstants.CENTER);
 		mnNotasFaltas.add(mntmNotasFaltasConsultar);
 
 		JMenu mnAjuda = new JMenu("Ajuda");
+		mnAjuda.setFont(new Font("Roboto Medium", Font.PLAIN, 12));
 		menuBar.add(mnAjuda);
 
 		JMenuItem mntmAjudaSobre = new JMenuItem("Sobre");
+		mntmAjudaSobre.setFont(new Font("Roboto", Font.PLAIN, 12));
 		mntmAjudaSobre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,

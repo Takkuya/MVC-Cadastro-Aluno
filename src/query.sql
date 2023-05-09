@@ -32,7 +32,7 @@ VALUES
 SELECT * FROM aluno;
 
 DELETE FROM aluno WHERE 1=1;
-
+DELETE FROM aluno WHERE rgm=12312213;
 
 -- DROP TABLE aluno;
 
@@ -44,7 +44,7 @@ CREATE TABLE Notas_e_faltas (
   falta INT(11) NOT NULL,
   RGM_aluno CHAR(8) NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (RGM_aluno) REFERENCES aluno(RGM)
+  FOREIGN KEY (RGM_aluno) REFERENCES aluno(RGM) ON DELETE CASCADE
 );
 
 DROP TABLE Notas_e_faltas;
