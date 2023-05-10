@@ -287,7 +287,7 @@ public class MainScreen extends JFrame {
 		JComboBox[] comboBoxes = { comboBoxCurso, comboCampus, comboBoxUf };
 
 		// salvar aluno
-		JButton btnSave = new JButton(saveIcon);
+		JButton btnSave = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/FloppyDiskBack.png")));
 		btnSave.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -306,6 +306,18 @@ public class MainScreen extends JFrame {
 							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
 							selectedPeriodo);
 
+					formattedTextFieldRgm.setText(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
+					formattedTextFieldCelular.setText(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
+					formattedTextFieldCpf.setText(null);
+					formattedTextFieldDataNascimento.setText(null);
+					comboCampus.setSelectedIndex(0);
+					comboBoxCurso.setSelectedIndex(0);
+					comboBoxUf.setSelectedIndex(0);
+					radioBtnGroup.clearSelection();
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao salvar o aluno: " + err.getMessage());
 				}
@@ -317,7 +329,7 @@ public class MainScreen extends JFrame {
 		panelCurso.add(btnSave);
 
 		// alterar aluno
-		JButton btnUpdate = new JButton(editIcon);
+		JButton btnUpdate = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/PencilSimpleLine.png")));
 		btnUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnUpdate.setToolTipText("Alterar");
 		btnUpdate.addActionListener(new ActionListener() {
@@ -337,6 +349,19 @@ public class MainScreen extends JFrame {
 							comboBoxCurso.getSelectedItem().toString(), comboCampus.getSelectedItem().toString(),
 							selectedPeriodo);
 
+					formattedTextFieldRgm.setText(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
+					formattedTextFieldCelular.setText(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
+					formattedTextFieldCpf.setText(null);
+					formattedTextFieldDataNascimento.setText(null);
+					comboCampus.setSelectedIndex(0);
+					comboBoxCurso.setSelectedIndex(0);
+					comboBoxUf.setSelectedIndex(0);
+					radioBtnGroup.clearSelection();
+
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
 				}
@@ -347,7 +372,7 @@ public class MainScreen extends JFrame {
 		panelCurso.add(btnUpdate);
 
 		// consultar aluno
-		JButton btnGet = new JButton(searchIcon);
+		JButton btnGet = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/MagnifyingGlass.png")));
 		btnGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnGet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -397,11 +422,24 @@ public class MainScreen extends JFrame {
 		panelCurso.add(btnGet);
 
 		// deletar aluno
-		JButton btnDelete = new JButton(trashIcon);
+		JButton btnDelete = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/Trash.png")));
 		btnDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
+
+				formattedTextFieldRgm.setText(null);
+				formattedTextFieldNome.setText(null);
+				formattedTextFieldEmail.setText(null);
+				formattedTextFieldCelular.setText(null);
+				formattedTextFieldMunicipio.setText(null);
+				formattedTextFieldEnd.setText(null);
+				formattedTextFieldCpf.setText(null);
+				formattedTextFieldDataNascimento.setText(null);
+				comboCampus.setSelectedIndex(0);
+				comboBoxCurso.setSelectedIndex(0);
+				comboBoxUf.setSelectedIndex(0);
+				radioBtnGroup.clearSelection();
 			}
 		});
 		btnDelete.setToolTipText("Deletar");
@@ -504,31 +542,43 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(formattedTextFieldFaltas);
 
 		// salvar notas
-		JButton btnNotasSave = new JButton(saveIcon);
+		JButton btnNotasSave = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/FloppyDiskBack.png")));
 		btnNotasSave.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasSave.setBounds(26, 198, 100, 100);
 		btnNotasSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					alunoDAO = new AlunoDAO();
+					List<Aluno> alunoArr = new ArrayList<Aluno>();
 
-//					Aluno alunoExists = alunoDAO.verificarSeAlunoExiste(formattedTextFieldRgmNotas.getText());
-//
-//					// se o aluno já existe
-//					if (alunoExists != null) {
-//						JOptionPane.showMessageDialog(null, "Já existe um aluno cadastrado com o mesmo RGM");
-//						return;
-//					}
+					alunoArr = alunoDAO.listarAluno(formattedTextFieldRgmNotas.getText());
+
+					// verificar se o aluno/rgm existe
+					if (alunoArr.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Não existe um aluno com esse RGM.");
+						return; // para interromper o fluxo do método, caso o RGM seja inválido
+					}
+
+					if (formattedTextFieldRgmNotas.getText().trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Preencha o campo de RGM");
+						return;
+					}
+
+					if (formattedTextFieldFaltas.getText().trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Preencha o campo de falta!");
+						return;
+					}
 
 					notasFaltasDAO = new NotasFaltasDAO();
 
-					if (notasFaltasDAO.verificarDisciplinaSemestreExistente(
-							comboBoxCursoDisciplina.getSelectedItem().toString(), comboNota.getSelectedItem().toString(),
-							formattedTextFieldFaltas.getText())) {
+					// verifica se a discplina e o semestre já existem para este aluno
+					if (notasFaltasDAO.verificarDisciplinaSemestreExistente(formattedTextFieldRgmNotas.getText(),
+							comboBoxCursoDisciplina.getSelectedItem().toString(),
+							comboBoxSemestre.getSelectedItem().toString())) {
 						JOptionPane.showMessageDialog(null, "A disciplina e o semestre já existem para este aluno!");
 						return;
 					}
-					
+
 					notasFaltas = new NotasFaltas();
 
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
@@ -538,6 +588,15 @@ public class MainScreen extends JFrame {
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.salvar(notasFaltas);
+
+					formattedTextFieldRgmNotas.setText(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					formattedTextFieldFaltas.setText(null);
+
+					comboBoxCursoDisciplina.setSelectedIndex(0);
+					comboBoxSemestre.setSelectedIndex(0);
+					comboNota.setSelectedIndex(0);
 
 					JOptionPane.showMessageDialog(null, "Informações inseridas com sucesso!!");
 				} catch (Exception err) {
@@ -549,7 +608,8 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(btnNotasSave);
 
 		// alterar notas
-		JButton btnNotasUpdate = new JButton(editIcon);
+		JButton btnNotasUpdate = new JButton(
+				new ImageIcon(MainScreen.class.getResource("/assets/PencilSimpleLine.png")));
 		btnNotasUpdate.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -566,6 +626,15 @@ public class MainScreen extends JFrame {
 					notasFaltasDAO.alterar(notasFaltas);
 
 					JOptionPane.showMessageDialog(null, "Informações alteradas com sucesso!!");
+
+					formattedTextFieldRgmNotas.setText(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+
+					comboBoxCursoDisciplina.setSelectedIndex(0);
+					comboBoxSemestre.setSelectedIndex(0);
+					comboNota.setSelectedIndex(0);
+					formattedTextFieldFaltas.setText(null);
 				} catch (Exception err) {
 					System.err.println("Erro ao alterar nota:" + err.getMessage());
 				}
@@ -576,7 +645,7 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(btnNotasUpdate);
 
 		// consultar notas
-		JButton btnNotasGet = new JButton(searchIcon);
+		JButton btnNotasGet = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/MagnifyingGlass.png")));
 		btnNotasGet.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasGet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -588,6 +657,15 @@ public class MainScreen extends JFrame {
 					formattedTextFieldCursoAluno.setText(aluno.getCurso());
 
 					JOptionPane.showMessageDialog(null, "Aluno encontrado!!");
+
+					formattedTextFieldRgmNotas.setText(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+
+					comboBoxCursoDisciplina.setSelectedIndex(0);
+					comboBoxSemestre.setSelectedIndex(0);
+					comboNota.setSelectedIndex(0);
+					formattedTextFieldFaltas.setText(null);
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
 				}
@@ -598,7 +676,7 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(btnNotasGet);
 
 		// deletar notas
-		JButton btnNotasDelete = new JButton(trashIcon);
+		JButton btnNotasDelete = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/Trash.png")));
 		btnNotasDelete.setFont(new Font("Roboto", Font.PLAIN, 16));
 		btnNotasDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -651,7 +729,7 @@ public class MainScreen extends JFrame {
 		lblBoletimRgm.setBounds(10, 19, 119, 14);
 		panelBoletim.add(lblBoletimRgm);
 
-		JFormattedTextField formattedTextFieldBoletimRgm = new JFormattedTextField();
+		JFormattedTextField formattedTextFieldBoletimRgm = new JFormattedTextField(new MaskFormatter(rgmMask));
 		formattedTextFieldBoletimRgm.setFont(new Font("Roboto", Font.PLAIN, 16));
 		formattedTextFieldBoletimRgm.setBounds(131, 14, 102, 25);
 		panelBoletim.add(formattedTextFieldBoletimRgm);
@@ -700,10 +778,13 @@ public class MainScreen extends JFrame {
 							textArea.append("Disciplina do aluno...  " + notasFaltas.getDisciplina() + "\n");
 							textArea.append("Semestre do curso...  " + notasFaltas.getSemestre() + "\n");
 							textArea.append("Nota da disciplina...  " + notasFaltas.getNota() + "\n");
-							textArea.append("Faltas da disciplina...  " + notasFaltas.getFalta() + "\n");
+							textArea.append("Faltas da disciplina...  " + notasFaltas.getFalta() + "\n\n");
 						}
 					}
 
+					textArea.setCaretPosition(0);
+
+					formattedTextFieldBoletimRgm.setText(null);
 				} catch (Exception err) {
 					System.out.println(err.getMessage());
 				}
@@ -855,6 +936,7 @@ public class MainScreen extends JFrame {
 				radioBtnGroup.clearSelection();
 			}
 		});
+
 		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.SHIFT_DOWN_MASK));
 		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.CENTER);
 		mnAluno.add(mntmNewMenuItem);
@@ -898,26 +980,6 @@ public class MainScreen extends JFrame {
 		});
 		mntmAjudaSobre.setHorizontalAlignment(SwingConstants.CENTER);
 		mnAjuda.add(mntmAjudaSobre);
-
 	}
 
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
 }

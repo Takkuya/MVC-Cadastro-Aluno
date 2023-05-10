@@ -29,8 +29,12 @@ public class NotasFaltasDAO {
 	// determinado aluno
 	public boolean verificarDisciplinaSemestreExistente(String rgm, String disciplina, String semestre)
 			throws Exception {
-		String sql = "SELECT * FROM notas_faltas WHERE rgm_aluno = ? AND disciplina = ? AND semestre = ?";
+		String sql = "SELECT * FROM Notas_e_faltas WHERE rgm_aluno = ? AND disciplina = ? AND semestre = ?";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			System.out.println("pinto" + rgm);
+			System.out.println("pinto" + disciplina);
+			System.out.println("pinto" + semestre);
+			
 			preparedStatement.setString(1, rgm);
 			preparedStatement.setString(2, disciplina);
 			preparedStatement.setString(3, semestre);
@@ -41,10 +45,8 @@ public class NotasFaltasDAO {
 	}
 
 	public void salvar(NotasFaltas notasFaltas) throws Exception {
-		if (notasFaltas == null)
-			throw new Exception("O valor passado nao pode ser nulo");
 		try {
-			String SQL = "INSERT INTO Notas_e_faltas(disciplina, semestre, nota, falta, RGM_aluno) " + "VALUES "
+			String SQL = "INSERT INTO notas_e_faltas(disciplina, semestre, nota, falta, RGM_aluno) " + "VALUES "
 					+ "(?, ?, ?, ?, ?);";
 
 			preparedStatement = connection.prepareStatement(SQL);
@@ -89,7 +91,7 @@ public class NotasFaltasDAO {
 
 	public void alterar(NotasFaltas notasFaltas) throws Exception {
 		try {
-			String sql = "UPDATE notas_e_faltas SET nota=?, falta=? "
+			String sql = "UPDATE Notas_e_faltas SET nota=?, falta=? "
 					+ "WHERE RGM_aluno=? AND disciplina=? AND semestre=?";
 
 			preparedStatement = connection.prepareStatement(sql);
