@@ -13,6 +13,8 @@ public class ConnectionFactory {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
+			// mudar essas informações de acordo com as informações que você colocou na
+			// instalação do seu MySQL
 			String login = "root";
 			String senha = "An1m&s55085508";
 			String url = "jdbc:mysql://localhost:3306/cadastro_aluno_mvc";
@@ -47,7 +49,6 @@ public class ConnectionFactory {
 
 	public static void main(String[] args) {
 		try {
-			Connection connection = ConnectionFactory.getConnection();
 			JOptionPane.showMessageDialog(null, "Banco de dados conectado com sucesso!!");
 		} catch (Exception e) {
 			e.printStackTrace();

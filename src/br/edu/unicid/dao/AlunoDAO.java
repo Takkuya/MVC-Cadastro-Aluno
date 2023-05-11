@@ -153,8 +153,6 @@ public class AlunoDAO {
 
 				alunoArr.add(aluno);
 			}
-
-			System.out.println(alunoArr);
 			return alunoArr;
 		} catch (Exception err) {
 			throw new Exception("Erro ao listar aluno: " + err.getMessage());
@@ -196,7 +194,6 @@ public class AlunoDAO {
 
 			preparedStatement.executeUpdate();
 
-			System.out.println("Caiu no DAo de alterar aluno");
 		} catch (Exception err) {
 			System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
 			throw new Exception(err.getMessage());

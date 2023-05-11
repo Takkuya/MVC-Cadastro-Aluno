@@ -31,10 +31,7 @@ public class NotasFaltasDAO {
 			throws Exception {
 		String sql = "SELECT * FROM Notas_e_faltas WHERE rgm_aluno = ? AND disciplina = ? AND semestre = ?";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			System.out.println("pinto" + rgm);
-			System.out.println("pinto" + disciplina);
-			System.out.println("pinto" + semestre);
-			
+
 			preparedStatement.setString(1, rgm);
 			preparedStatement.setString(2, disciplina);
 			preparedStatement.setString(3, semestre);
@@ -56,12 +53,6 @@ public class NotasFaltasDAO {
 			preparedStatement.setString(3, notasFaltas.getNota());
 			preparedStatement.setString(4, notasFaltas.getFalta());
 			preparedStatement.setString(5, notasFaltas.getRgmAluno());
-
-			System.out.println("disciplina..." + notasFaltas.getDisciplina());
-			System.out.println("semestre..." + notasFaltas.getSemestre());
-			System.out.println("nota..." + notasFaltas.getNota());
-			System.out.println("falta..." + notasFaltas.getFalta());
-			System.out.println("rgm..." + notasFaltas.getRgmAluno());
 
 			preparedStatement.executeUpdate();
 		} catch (Exception err) {
