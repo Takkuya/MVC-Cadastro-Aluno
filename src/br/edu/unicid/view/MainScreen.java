@@ -44,6 +44,7 @@ import br.edu.unicid.model.Aluno;
 import br.edu.unicid.model.NotasFaltas;
 import br.edu.unicid.utilities.ViewAlunoMethods;
 import java.awt.SystemColor;
+import javax.swing.JSpinner;
 
 public class MainScreen extends JFrame {
 	private JPanel contentPane;
@@ -355,11 +356,11 @@ public class MainScreen extends JFrame {
 							selectedPeriodo);
 
 					formattedTextFieldRgm.setValue(null);
-					formattedTextFieldNome.setValue(null);
-					formattedTextFieldEmail.setValue(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
 					formattedTextFieldCelular.setValue(null);
-					formattedTextFieldMunicipio.setValue(null);
-					formattedTextFieldEnd.setValue(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
 					formattedTextFieldCpf.setValue(null);
 					formattedTextFieldDataNascimento.setValue(null);
 					comboCampus.setSelectedIndex(0);
@@ -446,18 +447,17 @@ public class MainScreen extends JFrame {
 							selectedPeriodo);
 
 					formattedTextFieldRgm.setValue(null);
-					formattedTextFieldNome.setValue(null);
-					formattedTextFieldEmail.setValue(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
 					formattedTextFieldCelular.setValue(null);
-					formattedTextFieldMunicipio.setValue(null);
-					formattedTextFieldEnd.setValue(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
 					formattedTextFieldCpf.setValue(null);
 					formattedTextFieldDataNascimento.setValue(null);
 					comboCampus.setSelectedIndex(0);
 					comboBoxCurso.setSelectedIndex(0);
 					comboBoxUf.setSelectedIndex(0);
 					radioBtnGroup.clearSelection();
-
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
 				}
@@ -525,11 +525,11 @@ public class MainScreen extends JFrame {
 				viewAlunoMethods.deleteAluno(formattedTextFieldRgm.getText());
 
 				formattedTextFieldRgm.setValue(null);
-				formattedTextFieldNome.setValue(null);
-				formattedTextFieldEmail.setValue(null);
+				formattedTextFieldNome.setText(null);
+				formattedTextFieldEmail.setText(null);
 				formattedTextFieldCelular.setValue(null);
-				formattedTextFieldMunicipio.setValue(null);
-				formattedTextFieldEnd.setValue(null);
+				formattedTextFieldMunicipio.setText(null);
+				formattedTextFieldEnd.setText(null);
 				formattedTextFieldCpf.setValue(null);
 				formattedTextFieldDataNascimento.setValue(null);
 				comboCampus.setSelectedIndex(0);
@@ -548,11 +548,11 @@ public class MainScreen extends JFrame {
 		btnCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formattedTextFieldRgm.setValue(null);
-				formattedTextFieldNome.setValue(null);
-				formattedTextFieldEmail.setValue(null);
+				formattedTextFieldNome.setText(null);
+				formattedTextFieldEmail.setText(null);
 				formattedTextFieldCelular.setValue(null);
-				formattedTextFieldMunicipio.setValue(null);
-				formattedTextFieldEnd.setValue(null);
+				formattedTextFieldMunicipio.setText(null);
+				formattedTextFieldEnd.setText(null);
 				formattedTextFieldCpf.setValue(null);
 				formattedTextFieldDataNascimento.setValue(null);
 				comboCampus.setSelectedIndex(0);
@@ -581,6 +581,7 @@ public class MainScreen extends JFrame {
 		panelNotasEFaltas.add(formattedTextFieldRgmNotas);
 
 		JFormattedTextField formattedTextFieldNomeAluno = new JFormattedTextField();
+		formattedTextFieldNomeAluno.setEditable(false);
 		formattedTextFieldNomeAluno.setDisabledTextColor(SystemColor.desktop);
 		formattedTextFieldNomeAluno.setEnabled(false);
 		formattedTextFieldNomeAluno.setBounds(339, 26, 315, 25);
@@ -637,10 +638,10 @@ public class MainScreen extends JFrame {
 		lblFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
 		panelNotasEFaltas.add(lblFaltas);
 
-		JFormattedTextField formattedTextFieldFaltas = new JFormattedTextField();
-		formattedTextFieldFaltas.setBounds(414, 137, 240, 25);
-		formattedTextFieldFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
-		panelNotasEFaltas.add(formattedTextFieldFaltas);
+		JSpinner spinnerFaltas = new JSpinner();
+		spinnerFaltas.setFont(new Font("Roboto", Font.PLAIN, 16));
+		spinnerFaltas.setBounds(414, 137, 70, 25);
+		panelNotasEFaltas.add(spinnerFaltas);
 
 		// salvar notas
 		JButton btnNotasSave = new JButton(new ImageIcon(MainScreen.class.getResource("/assets/FloppyDiskBack.png")));
@@ -666,25 +667,15 @@ public class MainScreen extends JFrame {
 						return;
 					}
 
-					// caso o campo de falta esteja vazio
-					if (formattedTextFieldFaltas.getText().trim().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Preencha o campo de falta!");
-						return;
-					}
-
-					// caso o número de caracteres do campo de faltas ultrapasse 3
-					if (formattedTextFieldFaltas.getText().length() > 3) {
-						JOptionPane.showMessageDialog(null, "O campo de faltas deve conter no máximo 3 caracteres!");
-						return;
-					}
-
 					// Verifica se o valor de faltas é maior que 30 ou menor que 0
-					if (Integer.parseInt(formattedTextFieldFaltas.getText()) > 30
-							|| Integer.parseInt(formattedTextFieldFaltas.getText()) < 0) {
+					if (Integer.parseInt(spinnerFaltas.getValue().toString()) > 30
+							|| Integer.parseInt(spinnerFaltas.getValue().toString()) < 0) {
 						JOptionPane.showMessageDialog(null,
 								"O número de faltas não pode ser maior do que 30 e nem menor que 0.");
 						return;
 					}
+
+					System.out.println("print" + spinnerFaltas.getValue());
 
 					notasFaltasDAO = new NotasFaltasDAO();
 
@@ -701,15 +692,15 @@ public class MainScreen extends JFrame {
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
 					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
 					notasFaltas.setNota(comboNota.getSelectedItem().toString());
-					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setFalta(spinnerFaltas.getValue().toString());
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.salvar(notasFaltas);
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -747,8 +738,11 @@ public class MainScreen extends JFrame {
 						return;
 					}
 
-					if (formattedTextFieldFaltas.getText().trim().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Preencha o campo de falta!");
+					// Verifica se o valor de faltas é maior que 30 ou menor que 0
+					if (Integer.parseInt(spinnerFaltas.getValue().toString()) > 30
+							|| Integer.parseInt(spinnerFaltas.getValue().toString()) < 0) {
+						JOptionPane.showMessageDialog(null,
+								"O número de faltas não pode ser maior do que 30 e nem menor que 0.");
 						return;
 					}
 
@@ -759,7 +753,7 @@ public class MainScreen extends JFrame {
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
 					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
 					notasFaltas.setNota(comboNota.getSelectedItem().toString());
-					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setFalta(spinnerFaltas.getValue().toString());
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.alterar(notasFaltas);
@@ -767,9 +761,9 @@ public class MainScreen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Informações alteradas com sucesso!!");
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -846,9 +840,9 @@ public class MainScreen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Nota excluída com sucesso!");
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -868,9 +862,9 @@ public class MainScreen extends JFrame {
 		btnNotasCleanFields.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formattedTextFieldRgmNotas.setValue(null);
-				formattedTextFieldNomeAluno.setValue(null);
-				formattedTextFieldCursoAluno.setValue(null);
-				formattedTextFieldFaltas.setValue(null);
+				formattedTextFieldNomeAluno.setText(null);
+				formattedTextFieldCursoAluno.setText(null);
+				spinnerFaltas.setValue(0);
 
 				comboBoxCursoDisciplina.setSelectedIndex(0);
 				comboBoxSemestre.setSelectedIndex(0);
@@ -1049,11 +1043,11 @@ public class MainScreen extends JFrame {
 							selectedPeriodo);
 
 					formattedTextFieldRgm.setValue(null);
-					formattedTextFieldNome.setValue(null);
-					formattedTextFieldEmail.setValue(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
 					formattedTextFieldCelular.setValue(null);
-					formattedTextFieldMunicipio.setValue(null);
-					formattedTextFieldEnd.setValue(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
 					formattedTextFieldCpf.setValue(null);
 					formattedTextFieldDataNascimento.setValue(null);
 					comboCampus.setSelectedIndex(0);
@@ -1138,18 +1132,17 @@ public class MainScreen extends JFrame {
 							selectedPeriodo);
 
 					formattedTextFieldRgm.setValue(null);
-					formattedTextFieldNome.setValue(null);
-					formattedTextFieldEmail.setValue(null);
+					formattedTextFieldNome.setText(null);
+					formattedTextFieldEmail.setText(null);
 					formattedTextFieldCelular.setValue(null);
-					formattedTextFieldMunicipio.setValue(null);
-					formattedTextFieldEnd.setValue(null);
+					formattedTextFieldMunicipio.setText(null);
+					formattedTextFieldEnd.setText(null);
 					formattedTextFieldCpf.setValue(null);
 					formattedTextFieldDataNascimento.setValue(null);
 					comboCampus.setSelectedIndex(0);
 					comboBoxCurso.setSelectedIndex(0);
 					comboBoxUf.setSelectedIndex(0);
 					radioBtnGroup.clearSelection();
-
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao alterar as informações do aluno: " + err.getMessage());
 				}
@@ -1199,8 +1192,6 @@ public class MainScreen extends JFrame {
 					}
 
 					JOptionPane.showMessageDialog(null, "Aluno encontrado!!");
-
-					formattedTextFieldRgm.setValue(null);
 				} catch (Exception err) {
 					System.err.println("Ocorreu um erro ao consultar aluno: " + err.getMessage());
 				}
@@ -1286,25 +1277,15 @@ public class MainScreen extends JFrame {
 						return;
 					}
 
-					// caso o campo de falta esteja vazio
-					if (formattedTextFieldFaltas.getText().trim().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Preencha o campo de falta!");
-						return;
-					}
-
-					// caso o número de caracteres do campo de faltas ultrapasse 3
-					if (formattedTextFieldFaltas.getText().length() > 3) {
-						JOptionPane.showMessageDialog(null, "O campo de faltas deve conter no máximo 3 caracteres!");
-						return;
-					}
-
 					// Verifica se o valor de faltas é maior que 30 ou menor que 0
-					if (Integer.parseInt(formattedTextFieldFaltas.getText()) > 30
-							|| Integer.parseInt(formattedTextFieldFaltas.getText()) < 0) {
+					if (Integer.parseInt(spinnerFaltas.getValue().toString()) > 30
+							|| Integer.parseInt(spinnerFaltas.getValue().toString()) < 0) {
 						JOptionPane.showMessageDialog(null,
 								"O número de faltas não pode ser maior do que 30 e nem menor que 0.");
 						return;
 					}
+
+					System.out.println("print" + spinnerFaltas.getValue());
 
 					notasFaltasDAO = new NotasFaltasDAO();
 
@@ -1321,15 +1302,15 @@ public class MainScreen extends JFrame {
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
 					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
 					notasFaltas.setNota(comboNota.getSelectedItem().toString());
-					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setFalta(spinnerFaltas.getValue().toString());
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.salvar(notasFaltas);
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -1366,8 +1347,11 @@ public class MainScreen extends JFrame {
 						return;
 					}
 
-					if (formattedTextFieldFaltas.getText().trim().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Preencha o campo de falta!");
+					// Verifica se o valor de faltas é maior que 30 ou menor que 0
+					if (Integer.parseInt(spinnerFaltas.getValue().toString()) > 30
+							|| Integer.parseInt(spinnerFaltas.getValue().toString()) < 0) {
+						JOptionPane.showMessageDialog(null,
+								"O número de faltas não pode ser maior do que 30 e nem menor que 0.");
 						return;
 					}
 
@@ -1378,7 +1362,7 @@ public class MainScreen extends JFrame {
 					notasFaltas.setDisciplina(comboBoxCursoDisciplina.getSelectedItem().toString());
 					notasFaltas.setSemestre(comboBoxSemestre.getSelectedItem().toString());
 					notasFaltas.setNota(comboNota.getSelectedItem().toString());
-					notasFaltas.setFalta(formattedTextFieldFaltas.getText());
+					notasFaltas.setFalta(spinnerFaltas.getValue().toString());
 					notasFaltas.setRgmAluno(formattedTextFieldRgmNotas.getText());
 
 					notasFaltasDAO.alterar(notasFaltas);
@@ -1386,9 +1370,9 @@ public class MainScreen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Informações alteradas com sucesso!!");
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -1443,9 +1427,9 @@ public class MainScreen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Nota excluída com sucesso!");
 
 					formattedTextFieldRgmNotas.setValue(null);
-					formattedTextFieldNomeAluno.setValue(null);
-					formattedTextFieldCursoAluno.setValue(null);
-					formattedTextFieldFaltas.setValue(null);
+					formattedTextFieldNomeAluno.setText(null);
+					formattedTextFieldCursoAluno.setText(null);
+					spinnerFaltas.setValue(0);
 
 					comboBoxCursoDisciplina.setSelectedIndex(0);
 					comboBoxSemestre.setSelectedIndex(0);
@@ -1497,5 +1481,4 @@ public class MainScreen extends JFrame {
 		mnAjuda.add(mntmAjudaSobre);
 
 	}
-
 }
