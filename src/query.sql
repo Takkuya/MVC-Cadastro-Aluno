@@ -39,7 +39,7 @@ CREATE TABLE Notas_e_faltas (
   semestre VARCHAR(4) NOT NULL,
   nota DECIMAL(4,2) NOT NULL,
   falta INT(11) NOT NULL,
-  RGM_aluno INT(8) NOT NULL,
+  RGM_aluno CHAR(8) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (RGM_aluno) REFERENCES aluno(RGM)
 );
